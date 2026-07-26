@@ -8,6 +8,7 @@ resource "aws_instance" "ec2" {
   instance_type = var.instance_type
   key_name      = var.key_name
   monitoring    = true
+  ebs_optimized = true
 
 
   subnet_id = var.subnet_id
