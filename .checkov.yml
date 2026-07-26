@@ -2,6 +2,3 @@ framework:
   - terraform
 
 quiet: false
-
-skip-check:
-  - CKV_AWS_8
