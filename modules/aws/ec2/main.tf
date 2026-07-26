@@ -7,6 +7,8 @@ resource "aws_instance" "ec2" {
   ami           = data.aws_ssm_parameter.amazon_linux.value
   instance_type = var.instance_type
   key_name      = var.key_name
+  monitoring    = true
+
 
   subnet_id = var.subnet_id
 
