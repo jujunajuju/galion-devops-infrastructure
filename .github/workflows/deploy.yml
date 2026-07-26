@@ -1,0 +1,50 @@
+name: Terraform Multicloud Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+
+  validation:
+    name: Validation Terraform
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Initialisation Terraform
+        run: terraform init
+
+      - name: Vérification du format Terraform
+        run: terraform fmt -check
+
+      - name: Validation Terraform
+        run: terraform validate
+
+
+  security:
+    name: Analyse sécurité Checkov
+    runs-on: ubuntu-latest
+    needs: validation
+
+    steps:
+
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation Checkov
+        run: pip install checkov
+
+      - name: Scan sécurité Terraform
+        run: checkov -d .
