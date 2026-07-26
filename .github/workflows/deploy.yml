@@ -47,4 +47,4 @@ jobs:
         run: pip install checkov
 
       - name: Scan sécurité Terraform
-        run: checkov -d .
+        run:  checkov -d . --config-file .checkov.yml
