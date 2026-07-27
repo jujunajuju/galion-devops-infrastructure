@@ -10,6 +10,10 @@ resource "aws_instance" "ec2" {
   monitoring    = true
   ebs_optimized = true
 
+  root_block_device {
+    encrypted = true
+  }
+
 
   subnet_id = var.subnet_id
 
