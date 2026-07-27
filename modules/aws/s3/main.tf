@@ -31,3 +31,14 @@ resource "aws_s3_bucket_logging" "bucket_logging" {
   target_prefix = "access-logs/"
 
 }
+
+resource "aws_s3_bucket_public_access_block" "bucket_public_access_block" {
+
+  bucket = aws_s3_bucket.bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+
+}
