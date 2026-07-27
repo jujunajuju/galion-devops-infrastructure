@@ -39,6 +39,8 @@ resource "aws_security_group" "ec2" {
 
   egress {
 
+    description = "Allow outbound traffic"
+
     from_port = 0
 
     to_port = 0
