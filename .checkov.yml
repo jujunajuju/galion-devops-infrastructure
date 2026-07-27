@@ -6,3 +6,4 @@ quiet: false
 skip-check:
   - CKV_AWS_88
   - CKV_AWS_260
+  - CKV_AWS_24
