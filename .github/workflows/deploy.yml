@@ -43,6 +43,9 @@ jobs:
       - name: Récupération du code
         uses: actions/checkout@v4
 
+      - name: Vérification fichier EC2
+        run: cat modules/aws/ec2/main.tf
+
       - name: Installation Checkov
         run: pip install checkov
 
