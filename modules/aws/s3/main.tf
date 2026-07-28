@@ -63,6 +63,7 @@ resource "aws_s3_bucket_versioning" "logs_versioning" {
 
 }
 
+#checkov:skip=CKV_AWS_18: Replica bucket used only for cross-region replication in this lab
 resource "aws_s3_bucket" "replica" {
 
   provider = aws.replication
