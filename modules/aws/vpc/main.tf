@@ -17,13 +17,26 @@ resource "aws_vpc" "main" {
 
 }
 
+
+resource "aws_kms_key" "cloudwatch_logs" {
+
+  description = "KMS key for VPC Flow Logs CloudWatch encryption"
+
+  enable_key_rotation = true
+
+}
+
+
 resource "aws_cloudwatch_log_group" "vpc_flow_logs" {
 
   name = "/aws/vpc/${var.environment}/flowlogs"
 
   retention_in_days = 30
 
+  kms_key_id = aws_kms_key.cloudwatch_logs.arn
+
 }
+
 
 resource "aws_iam_role" "vpc_flow_logs_role" {
 
@@ -48,6 +61,7 @@ resource "aws_iam_role" "vpc_flow_logs_role" {
   })
 
 }
+
 
 resource "aws_iam_role_policy" "vpc_flow_logs_policy" {
 
@@ -78,6 +92,7 @@ resource "aws_iam_role_policy" "vpc_flow_logs_policy" {
   })
 
 }
+
 
 resource "aws_flow_log" "vpc_flow_logs" {
 
