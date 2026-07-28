@@ -4,11 +4,12 @@ data "aws_ssm_parameter" "amazon_linux" {
 
 resource "aws_instance" "ec2" {
 
-  ami           = data.aws_ssm_parameter.amazon_linux.value
-  instance_type = var.instance_type
-  key_name      = var.key_name
-  monitoring    = true
-  ebs_optimized = true
+  ami                  = data.aws_ssm_parameter.amazon_linux.value
+  instance_type        = var.instance_type
+  key_name             = var.key_name
+  monitoring           = true
+  ebs_optimized        = true
+  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
   metadata_options {
     http_tokens = "required"
