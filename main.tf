@@ -25,6 +25,10 @@ module "s3" {
 
   source = "./modules/aws/s3"
 
+  providers = {
+    aws.replication = aws.replication
+  }
+
   project_name = var.project_name
 
   environment = var.environment

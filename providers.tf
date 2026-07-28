@@ -21,9 +21,16 @@ terraform {
 }
 
 
-# Provider AWS
+# Provider AWS principal
 provider "aws" {
   region = var.aws_region
+}
+
+
+# Provider AWS pour réplication S3
+provider "aws" {
+  alias  = "replication"
+  region = "eu-west-1"
 }
 
 
