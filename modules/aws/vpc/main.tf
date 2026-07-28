@@ -18,12 +18,42 @@ resource "aws_vpc" "main" {
 }
 
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_kms_key" "cloudwatch_logs" {
 
-  description = "KMS key for VPC Flow Logs CloudWatch encryption"
-
+  description         = "KMS key for VPC Flow Logs CloudWatch encryption"
   enable_key_rotation = true
 
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "EnableRootPermissions"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action   = "kms:*"
+        Resource = "*"
+      },
+      {
+        Sid    = "AllowCloudWatchLogs"
+        Effect = "Allow"
+        Principal = {
+          Service = "logs.${var.aws_region}.amazonaws.com"
+        }
+        Action = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
 }
 
 
@@ -62,7 +92,6 @@ resource "aws_iam_role" "vpc_flow_logs_role" {
 
 }
 
-
 resource "aws_iam_role_policy" "vpc_flow_logs_policy" {
 
   name = "${var.environment}-vpc-flow-logs-policy"
@@ -78,14 +107,22 @@ resource "aws_iam_role_policy" "vpc_flow_logs_policy" {
         Effect = "Allow"
 
         Action = [
-          "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents",
           "logs:DescribeLogGroups",
           "logs:DescribeLogStreams"
         ]
 
-        Resource = "*"
+        Resource = "${aws_cloudwatch_log_group.vpc_flow_logs.arn}:*"
+      },
+      {
+        Effect = "Allow"
+
+        Action = [
+          "logs:CreateLogGroup"
+        ]
+
+        Resource = aws_cloudwatch_log_group.vpc_flow_logs.arn
       }
     ]
 

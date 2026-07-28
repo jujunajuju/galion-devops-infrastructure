@@ -19,3 +19,8 @@ variable "availability_zone" {
   type        = string
   default     = "us-east-1a"
 }
+
+variable "aws_region" {
+  description = "AWS Region"
+  type        = string
+}
