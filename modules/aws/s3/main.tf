@@ -112,6 +112,13 @@ resource "aws_s3_bucket_lifecycle_configuration" "bucket_lifecycle" {
     filter {}
 
 
+    abort_incomplete_multipart_upload {
+
+      days_after_initiation = 7
+
+    }
+
+
     transition {
 
       days = 30
@@ -177,6 +184,47 @@ resource "aws_s3_bucket" "logs" {
 
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "logs_lifecycle" {
+
+  bucket = aws_s3_bucket.logs.id
+
+
+  rule {
+
+    id = "cleanup-old-log-files"
+
+    status = "Enabled"
+
+
+    filter {}
+
+
+    abort_incomplete_multipart_upload {
+
+      days_after_initiation = 7
+
+    }
+
+
+    transition {
+
+      days = 30
+
+      storage_class = "STANDARD_IA"
+
+    }
+
+
+    expiration {
+
+      days = 365
+
+    }
+
+  }
+
+}
+
 resource "aws_s3_bucket" "logs_replica" {
 
   provider = aws.replication
@@ -191,6 +239,78 @@ resource "aws_s3_bucket" "logs_replica" {
     Environment = var.environment
 
   }
+
+}
+
+resource "aws_s3_bucket_logging" "logs_replica_logging" {
+
+  provider = aws.replication
+
+  bucket = aws_s3_bucket.logs_replica.id
+
+  target_bucket = aws_s3_bucket.replica_logs_backup.id
+
+  target_prefix = "logs-replica-access-logs/"
+
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "logs_replica_lifecycle" {
+
+  provider = aws.replication
+
+  bucket = aws_s3_bucket.logs_replica.id
+
+
+  rule {
+
+    id = "cleanup-old-replica-log-files"
+
+    status = "Enabled"
+
+
+    filter {}
+
+
+    abort_incomplete_multipart_upload {
+
+      days_after_initiation = 7
+
+    }
+
+
+    transition {
+
+      days = 30
+
+      storage_class = "STANDARD_IA"
+
+    }
+
+
+    expiration {
+
+      days = 365
+
+    }
+
+  }
+
+}
+
+resource "aws_s3_bucket_public_access_block" "logs_replica_public_access_block" {
+
+  provider = aws.replication
+
+  bucket = aws_s3_bucket.logs_replica.id
+
+
+  block_public_acls = true
+
+  block_public_policy = true
+
+  ignore_public_acls = true
+
+  restrict_public_buckets = true
 
 }
 
@@ -541,6 +661,13 @@ resource "aws_s3_bucket_lifecycle_configuration" "replica_lifecycle" {
     filter {}
 
 
+    abort_incomplete_multipart_upload {
+
+      days_after_initiation = 7
+
+    }
+
+
     noncurrent_version_expiration {
 
       noncurrent_days = 90
@@ -628,6 +755,78 @@ resource "aws_s3_bucket" "replica_logs_backup" {
     Environment = var.environment
 
   }
+
+}
+
+resource "aws_s3_bucket_logging" "replica_logs_backup_logging" {
+
+  provider = aws.replication
+
+  bucket = aws_s3_bucket.replica_logs_backup.id
+
+  target_bucket = aws_s3_bucket.replica_logs_backup.id
+
+  target_prefix = "replica-logs-backup-access-logs/"
+
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "replica_logs_backup_lifecycle" {
+
+  provider = aws.replication
+
+  bucket = aws_s3_bucket.replica_logs_backup.id
+
+
+  rule {
+
+    id = "cleanup-old-replica-logs-backup"
+
+    status = "Enabled"
+
+
+    filter {}
+
+
+    abort_incomplete_multipart_upload {
+
+      days_after_initiation = 7
+
+    }
+
+
+    transition {
+
+      days = 30
+
+      storage_class = "STANDARD_IA"
+
+    }
+
+
+    expiration {
+
+      days = 365
+
+    }
+
+  }
+
+}
+
+resource "aws_s3_bucket_public_access_block" "replica_logs_backup_public_access_block" {
+
+  provider = aws.replication
+
+  bucket = aws_s3_bucket.replica_logs_backup.id
+
+
+  block_public_acls = true
+
+  block_public_policy = true
+
+  ignore_public_acls = true
+
+  restrict_public_buckets = true
 
 }
 
@@ -792,6 +991,13 @@ resource "aws_s3_bucket_lifecycle_configuration" "replica_logs_lifecycle" {
 
 
     filter {}
+
+
+    abort_incomplete_multipart_upload {
+
+      days_after_initiation = 7
+
+    }
 
 
     noncurrent_version_expiration {
