@@ -9,6 +9,7 @@ resource "aws_s3_bucket" "bucket" {
 
 }
 
+#checkov:skip=CKV_AWS_144:Logs bucket does not require cross-region replication in this lab environment
 
 resource "aws_s3_bucket" "logs" {
 

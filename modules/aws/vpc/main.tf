@@ -1,4 +1,6 @@
 #checkov:skip=CKV2_AWS_11:VPC Flow Logs are configured using aws_flow_log.vpc_flow_logs resource
+#checkov:skip=CKV2_AWS_12:Default security group is restricted using aws_default_security_group resource
+
 
 resource "aws_vpc" "main" {
 
@@ -7,7 +9,6 @@ resource "aws_vpc" "main" {
   enable_dns_support = true
 
   enable_dns_hostnames = true
-
 
   tags = {
 
@@ -18,42 +19,94 @@ resource "aws_vpc" "main" {
 }
 
 
+# Bloc ajouté pour corriger CKV2_AWS_12
+# Restriction du Security Group par défaut du VPC
+
+resource "aws_default_security_group" "default" {
+
+  vpc_id = aws_vpc.main.id
+
+  ingress = []
+
+  egress = []
+
+  tags = {
+
+    Name = "${var.environment}-default-sg-restricted"
+
+  }
+
+}
+
+
 data "aws_caller_identity" "current" {}
+
 
 resource "aws_kms_key" "cloudwatch_logs" {
 
-  description         = "KMS key for VPC Flow Logs CloudWatch encryption"
+  description = "KMS key for VPC Flow Logs CloudWatch encryption"
+
   enable_key_rotation = true
 
+
   policy = jsonencode({
+
     Version = "2012-10-17"
+
     Statement = [
+
       {
-        Sid    = "EnableRootPermissions"
+
+        Sid = "EnableRootPermissions"
+
         Effect = "Allow"
+
         Principal = {
+
           AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+
         }
-        Action   = "kms:*"
+
+        Action = "kms:*"
+
         Resource = "*"
+
       },
+
       {
-        Sid    = "AllowCloudWatchLogs"
+
+        Sid = "AllowCloudWatchLogs"
+
         Effect = "Allow"
+
         Principal = {
+
           Service = "logs.${var.aws_region}.amazonaws.com"
+
         }
+
         Action = [
+
           "kms:Encrypt",
+
           "kms:Decrypt",
+
           "kms:ReEncrypt*",
+
           "kms:GenerateDataKey*",
+
           "kms:DescribeKey"
+
         ]
+
         Resource = "*"
+
       }
+
     ]
+
   })
+
 }
 
 
@@ -72,25 +125,33 @@ resource "aws_iam_role" "vpc_flow_logs_role" {
 
   name = "${var.environment}-vpc-flow-logs-role"
 
+
   assume_role_policy = jsonencode({
 
     Version = "2012-10-17"
 
     Statement = [
+
       {
+
         Effect = "Allow"
 
         Principal = {
+
           Service = "vpc-flow-logs.amazonaws.com"
+
         }
 
         Action = "sts:AssumeRole"
+
       }
+
     ]
 
   })
 
 }
+
 
 resource "aws_iam_role_policy" "vpc_flow_logs_policy" {
 
@@ -98,32 +159,47 @@ resource "aws_iam_role_policy" "vpc_flow_logs_policy" {
 
   role = aws_iam_role.vpc_flow_logs_role.id
 
+
   policy = jsonencode({
 
     Version = "2012-10-17"
 
     Statement = [
+
       {
+
         Effect = "Allow"
 
         Action = [
+
           "logs:CreateLogStream",
+
           "logs:PutLogEvents",
+
           "logs:DescribeLogGroups",
+
           "logs:DescribeLogStreams"
+
         ]
 
         Resource = "${aws_cloudwatch_log_group.vpc_flow_logs.arn}:*"
+
       },
+
       {
+
         Effect = "Allow"
 
         Action = [
+
           "logs:CreateLogGroup"
+
         ]
 
         Resource = aws_cloudwatch_log_group.vpc_flow_logs.arn
+
       }
+
     ]
 
   })
@@ -143,10 +219,15 @@ resource "aws_flow_log" "vpc_flow_logs" {
 
   iam_role_arn = aws_iam_role.vpc_flow_logs_role.arn
 
+
   depends_on = [
+
     aws_vpc.main,
+
     aws_cloudwatch_log_group.vpc_flow_logs,
+
     aws_iam_role.vpc_flow_logs_role
+
   ]
 
 }
