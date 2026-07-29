@@ -1,7 +1,9 @@
 data "aws_caller_identity" "current" {}
 
 
-# Clé KMS région principale pour les buckets S3
+############################################
+# KMS KEY REGION PRINCIPALE
+############################################
 
 resource "aws_kms_key" "s3" {
 
@@ -12,7 +14,10 @@ resource "aws_kms_key" "s3" {
 }
 
 
-# Bucket principal
+
+############################################
+# BUCKET PRINCIPAL
+############################################
 
 resource "aws_s3_bucket" "bucket" {
 
@@ -26,12 +31,16 @@ resource "aws_s3_bucket" "bucket" {
 }
 
 
-# Chiffrement KMS bucket principal
+
+############################################
+# CHIFFREMENT BUCKET PRINCIPAL
+############################################
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_encryption" {
 
   bucket = aws_s3_bucket.bucket.id
 
+
   rule {
 
     apply_server_side_encryption_by_default {
@@ -48,26 +57,35 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_encryption
 
 
 
-# Bucket logs
+############################################
+# BUCKET LOGS REGION PRINCIPALE
+############################################
 
 resource "aws_s3_bucket" "logs" {
 
   bucket = "${var.project_name}-${var.environment}-logs"
 
+
   tags = {
-    Name        = "${var.project_name}-${var.environment}-logs"
+
+    Name = "${var.project_name}-${var.environment}-logs"
+
     Environment = var.environment
+
   }
 
 }
 
 
 
-# Chiffrement KMS bucket logs
+############################################
+# CHIFFREMENT LOGS
+############################################
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "logs_encryption" {
 
   bucket = aws_s3_bucket.logs.id
+
 
   rule {
 
@@ -85,28 +103,38 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "logs_encryption" 
 
 
 
-# Blocage accès public logs
+############################################
+# BLOCAGE PUBLIC LOGS
+############################################
 
 resource "aws_s3_bucket_public_access_block" "logs_public_access_block" {
 
   bucket = aws_s3_bucket.logs.id
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
+
+  block_public_acls = true
+
+  block_public_policy = true
+
+  ignore_public_acls = true
+
   restrict_public_buckets = true
 
 }
 
 
 
-# Logs du bucket principal
+############################################
+# LOGGING BUCKET PRINCIPAL
+############################################
 
 resource "aws_s3_bucket_logging" "bucket_logging" {
 
   bucket = aws_s3_bucket.bucket.id
 
+
   target_bucket = aws_s3_bucket.logs.id
+
 
   target_prefix = "access-logs/"
 
@@ -114,27 +142,36 @@ resource "aws_s3_bucket_logging" "bucket_logging" {
 
 
 
-# Blocage accès public bucket principal
+############################################
+# BLOCAGE PUBLIC BUCKET PRINCIPAL
+############################################
 
 resource "aws_s3_bucket_public_access_block" "bucket_public_access_block" {
 
   bucket = aws_s3_bucket.bucket.id
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
+
+  block_public_acls = true
+
+  block_public_policy = true
+
+  ignore_public_acls = true
+
   restrict_public_buckets = true
 
 }
 
 
 
-# Versioning bucket principal
+############################################
+# VERSIONING PRINCIPAL
+############################################
 
 resource "aws_s3_bucket_versioning" "bucket_versioning" {
 
   bucket = aws_s3_bucket.bucket.id
 
+
   versioning_configuration {
 
     status = "Enabled"
@@ -145,12 +182,15 @@ resource "aws_s3_bucket_versioning" "bucket_versioning" {
 
 
 
-# Versioning logs
+############################################
+# VERSIONING LOGS
+############################################
 
 resource "aws_s3_bucket_versioning" "logs_versioning" {
 
   bucket = aws_s3_bucket.logs.id
 
+
   versioning_configuration {
 
     status = "Enabled"
@@ -161,13 +201,17 @@ resource "aws_s3_bucket_versioning" "logs_versioning" {
 
 
 
-# Clé KMS région réplication
+############################################
+# KMS REGION REPLICA
+############################################
 
 resource "aws_kms_key" "s3_replica" {
 
   provider = aws.replication
 
+
   description = "KMS key for S3 replica encryption"
+
 
   enable_key_rotation = true
 
@@ -175,7 +219,9 @@ resource "aws_kms_key" "s3_replica" {
 
 
 
-# Bucket réplica
+############################################
+# BUCKET REPLICA
+############################################
 
 resource "aws_s3_bucket" "replica" {
 
@@ -197,7 +243,78 @@ resource "aws_s3_bucket" "replica" {
 
 
 
-# Chiffrement bucket replica
+############################################
+# BLOCAGE PUBLIC REPLICA
+############################################
+
+resource "aws_s3_bucket_public_access_block" "replica_public_access_block" {
+
+  provider = aws.replication
+
+
+  bucket = aws_s3_bucket.replica.id
+
+
+  block_public_acls = true
+
+  block_public_policy = true
+
+  ignore_public_acls = true
+
+  restrict_public_buckets = true
+
+}
+
+
+
+############################################
+# BUCKET LOGS REPLICA
+############################################
+
+resource "aws_s3_bucket" "replica_logs" {
+
+  provider = aws.replication
+
+
+  bucket = "${var.project_name}-${var.environment}-replica-logs"
+
+
+  tags = {
+
+    Name = "${var.project_name}-${var.environment}-replica-logs"
+
+    Environment = var.environment
+
+  }
+
+}
+
+
+
+############################################
+# LOGGING REPLICA
+############################################
+
+resource "aws_s3_bucket_logging" "replica_logging" {
+
+  provider = aws.replication
+
+
+  bucket = aws_s3_bucket.replica.id
+
+
+  target_bucket = aws_s3_bucket.replica_logs.id
+
+
+  target_prefix = "replica-access-logs/"
+
+}
+
+
+
+############################################
+# CHIFFREMENT REPLICA
+############################################
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "replica_encryption" {
 
@@ -223,7 +340,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "replica_encryptio
 
 
 
-# Versioning replica
+############################################
+# VERSIONING REPLICA
+############################################
 
 resource "aws_s3_bucket_versioning" "replica_versioning" {
 
@@ -241,9 +360,9 @@ resource "aws_s3_bucket_versioning" "replica_versioning" {
 
 }
 
-
-
-# Rôle IAM réplication S3
+############################################
+# ROLE IAM POUR REPLICATION S3
+############################################
 
 resource "aws_iam_role" "s3_replication_role" {
 
@@ -259,16 +378,15 @@ resource "aws_iam_role" "s3_replication_role" {
 
       {
 
-        Action = "sts:AssumeRole"
-
         Effect = "Allow"
-
 
         Principal = {
 
           Service = "s3.amazonaws.com"
 
         }
+
+        Action = "sts:AssumeRole"
 
       }
 
@@ -280,10 +398,11 @@ resource "aws_iam_role" "s3_replication_role" {
 
 
 
-# Permission réplication
+############################################
+# POLICY IAM REPLICATION + KMS
+############################################
 
 resource "aws_iam_role_policy" "s3_replication_policy" {
-
 
   name = "${var.project_name}-${var.environment}-s3-replication-policy"
 
@@ -294,17 +413,14 @@ resource "aws_iam_role_policy" "s3_replication_policy" {
 
   policy = jsonencode({
 
-
     Version = "2012-10-17"
 
 
     Statement = [
 
-
       {
 
         Effect = "Allow"
-
 
         Action = [
 
@@ -313,7 +429,6 @@ resource "aws_iam_role_policy" "s3_replication_policy" {
           "s3:ListBucket"
 
         ]
-
 
         Resource = aws_s3_bucket.bucket.arn
 
@@ -324,15 +439,15 @@ resource "aws_iam_role_policy" "s3_replication_policy" {
 
         Effect = "Allow"
 
-
         Action = [
 
           "s3:GetObjectVersion",
 
-          "s3:GetObjectVersionAcl"
+          "s3:GetObjectVersionAcl",
+
+          "s3:GetObjectVersionForReplication"
 
         ]
-
 
         Resource = "${aws_s3_bucket.bucket.arn}/*"
 
@@ -342,7 +457,6 @@ resource "aws_iam_role_policy" "s3_replication_policy" {
       {
 
         Effect = "Allow"
-
 
         Action = [
 
@@ -354,7 +468,6 @@ resource "aws_iam_role_policy" "s3_replication_policy" {
 
         ]
 
-
         Resource = "${aws_s3_bucket.replica.arn}/*"
 
       },
@@ -364,17 +477,17 @@ resource "aws_iam_role_policy" "s3_replication_policy" {
 
         Effect = "Allow"
 
-
         Action = [
 
           "kms:Decrypt",
 
           "kms:Encrypt",
 
-          "kms:GenerateDataKey"
+          "kms:GenerateDataKey",
+
+          "kms:DescribeKey"
 
         ]
-
 
         Resource = [
 
@@ -386,7 +499,6 @@ resource "aws_iam_role_policy" "s3_replication_policy" {
 
       }
 
-
     ]
 
   })
@@ -395,52 +507,76 @@ resource "aws_iam_role_policy" "s3_replication_policy" {
 
 
 
-# Configuration réplication cross-region
+############################################
+# REPLICATION CROSS REGION
+############################################
 
 resource "aws_s3_bucket_replication_configuration" "replication" {
 
+
   depends_on = [
+
     aws_s3_bucket_versioning.bucket_versioning,
+
     aws_s3_bucket_versioning.replica_versioning
+
   ]
 
+
   bucket = aws_s3_bucket.bucket.id
+
 
   role = aws_iam_role.s3_replication_role.arn
 
 
+
   rule {
+
 
     id = "replication-rule"
 
+
     status = "Enabled"
+
 
 
     filter {}
 
 
+
     delete_marker_replication {
+
       status = "Enabled"
+
     }
+
 
 
     source_selection_criteria {
 
+
       sse_kms_encrypted_objects {
+
         status = "Enabled"
+
       }
 
     }
 
 
+
     destination {
 
+
       bucket = aws_s3_bucket.replica.arn
+
 
       storage_class = "STANDARD"
 
 
+
       encryption_configuration {
+
 
         replica_kms_key_id = aws_kms_key.s3_replica.arn
 
