@@ -1,6 +1,12 @@
-
+# Terraform
 .terraform/
-terraform.tfstate
-terraform.tfstate.backup
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# Backup / erreur Terraform
+errored.tfstate
+
+# AWS keys
 keys/
 *.pem
