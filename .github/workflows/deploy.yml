@@ -106,8 +106,9 @@ jobs:
       - name: Configuration de la clé SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/galion-devops-key.pem
+          printf "%s" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/galion-devops-key.pem
           chmod 400 ~/.ssh/galion-devops-key.pem
+          ssh-keygen -y -f ~/.ssh/galion-devops-key.pem > /dev/null
 
       - name: Exécution du playbook Ansible
         working-directory: ansible
