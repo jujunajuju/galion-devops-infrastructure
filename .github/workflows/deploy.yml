@@ -135,4 +135,4 @@ jobs:
 
       - name: Vérification contenu page web
         run: |
-          curl -f http://100.53.85.65 | grep "Terraform + Ansible AWS deployment successful"
+          curl -f http://100.53.85.65 | grep "Galion DevOps"
