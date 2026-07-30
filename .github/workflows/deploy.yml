@@ -9,6 +9,7 @@ on:
     branches:
       - master
 
+
 jobs:
 
   validation:
@@ -23,7 +24,7 @@ jobs:
       - name: Installation Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Configurer les identifiants AWS
+      - name: Configuration AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -33,31 +34,32 @@ jobs:
       - name: Initialisation Terraform
         run: terraform init
 
-      - name: Vérification du format Terraform
+      - name: Vérification format Terraform
         run: terraform fmt -check
 
       - name: Validation Terraform
         run: terraform validate
 
 
+
   security:
     name: Analyse sécurité Checkov
     runs-on: ubuntu-latest
-    needs: validation
+
+    needs:
+      - validation
 
     steps:
 
       - name: Récupération du code
         uses: actions/checkout@v4
 
-      - name: Vérification fichier EC2
-        run: cat modules/aws/ec2/main.tf
-
       - name: Installation Checkov
         run: pip install checkov
 
       - name: Scan sécurité Terraform
         run: checkov -d . --config-file .checkov.yml
+
 
 
   deploy:
@@ -76,7 +78,7 @@ jobs:
       - name: Installation Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Configurer les identifiants AWS
+      - name: Configuration AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -88,6 +90,7 @@ jobs:
 
       - name: Déploiement Terraform
         run: terraform apply -auto-approve
+
 
 
   ansible:
@@ -107,17 +110,18 @@ jobs:
           sudo apt update
           sudo apt install ansible -y
 
-      - name: Configuration de la clé SSH
+      - name: Configuration clé SSH
         run: |
           mkdir -p ~/.ssh
           printf "%s" "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/galion-devops-key.pem
           chmod 400 ~/.ssh/galion-devops-key.pem
           ssh-keygen -y -f ~/.ssh/galion-devops-key.pem > /dev/null
 
-      - name: Exécution du playbook Ansible
+      - name: Déploiement configuration Ansible
         working-directory: ansible
         run: |
           ansible-playbook playbook.yml
+
 
 
   tests:
@@ -138,8 +142,9 @@ jobs:
           curl -f http://100.53.85.65 | grep "Galion DevOps"
 
 
+
   notification:
-    name: Rapport final déploiement
+    name: Rapport consolidé déploiement
     runs-on: ubuntu-latest
 
     needs:
@@ -153,55 +158,35 @@ jobs:
 
     steps:
 
-      - name: Rapport consolidé
+      - name: Génération du rapport final
         run: |
-          echo "================================="
-          echo "🚀 Terraform Multicloud Deployment"
-          echo "================================="
-          echo ""
-          echo "Validation Terraform : ${{ needs.validation.result }}"
-          echo "Checkov Security Scan : ${{ needs.security.result }}"
-          echo "Terraform AWS Deploy : ${{ needs.deploy.result }}"
-          echo "Ansible Configuration : ${{ needs.ansible.result }}"
-          echo "Deployment Tests : ${{ needs.tests.result }}"
-          echo ""
-          echo "Status final : Deployment completed"
-  notification:
-    name: Rapport consolidé du déploiement
-    runs-on: ubuntu-latest
 
-    needs:
-      - validation
-      - security
-      - deploy
-      - ansible
-      - tests
-
-    if: always()
-
-    steps:
-
-      - name: Générer le rapport final
-        run: |
           echo "# 🚀 Galion DevOps Deployment Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          echo "## Pipeline Status" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Deployment completed successfully" >> $GITHUB_STEP_SUMMARY
 
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          echo "## Pipeline Steps" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Terraform Validation" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Checkov Security Scan" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Terraform AWS Deployment" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Ansible Configuration" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Deployment Tests" >> $GITHUB_STEP_SUMMARY
+          echo "## Pipeline Results" >> $GITHUB_STEP_SUMMARY
+
+          echo "| Stage | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Terraform Validation | ${{ needs.validation.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security Checkov Scan | ${{ needs.security.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Terraform AWS Deploy | ${{ needs.deploy.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Ansible Configuration | ${{ needs.ansible.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Deployment Tests | ${{ needs.tests.result }} |" >> $GITHUB_STEP_SUMMARY
 
           echo "" >> $GITHUB_STEP_SUMMARY
 
           echo "## Infrastructure" >> $GITHUB_STEP_SUMMARY
-          echo "- AWS EC2" >> $GITHUB_STEP_SUMMARY
-          echo "- Amazon Linux 2023" >> $GITHUB_STEP_SUMMARY
-          echo "- Apache Web Server" >> $GITHUB_STEP_SUMMARY
-          echo "- Terraform + Ansible" >> $GITHUB_STEP_SUMMARY
+
+          echo "- ☁️ AWS EC2" >> $GITHUB_STEP_SUMMARY
+          echo "- 🐧 Amazon Linux 2023" >> $GITHUB_STEP_SUMMARY
+          echo "- 🌐 Apache Web Server" >> $GITHUB_STEP_SUMMARY
+          echo "- 🏗️ Terraform" >> $GITHUB_STEP_SUMMARY
+          echo "- ⚙️ Ansible" >> $GITHUB_STEP_SUMMARY
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "## Final Status" >> $GITHUB_STEP_SUMMARY
+
+          echo "Deployment pipeline completed." >> $GITHUB_STEP_SUMMARY
