@@ -87,3 +87,29 @@ jobs:
 
       - name: Déploiement Terraform
         run: terraform apply -auto-approve
+  ansible:
+    name: Configuration Ansible
+    runs-on: ubuntu-latest
+    needs:
+      - deploy
+
+    steps:
+
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation Ansible
+        run: |
+          sudo apt update
+          sudo apt install ansible -y
+
+      - name: Configuration de la clé SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/galion-devops-key.pem
+          chmod 400 ~/.ssh/galion-devops-key.pem
+
+      - name: Exécution du playbook Ansible
+        working-directory: ansible
+        run: |
+          ansible-playbook playbook.yml
