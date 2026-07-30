@@ -10,94 +10,19 @@
     state: started
     enabled: yes
 
-- name: Create index page
+- name: Deploy website files
   ansible.builtin.copy:
-    dest: /var/www/html/index.html
-    content: |
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Galion DevOps Platform</title>
-        <style>
-          body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e40af);
-            color: white;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
+    src: "{{ item }}"
+    dest: "/var/www/html/{{ item }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - index.html
+    - style.css
+    - script.js
 
-          .container {
-            background: rgba(255,255,255,0.1);
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            width: 600px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-          }
-
-          h1 {
-            font-size: 42px;
-            margin-bottom: 10px;
-          }
-
-          h2 {
-            font-weight: normal;
-            color: #93c5fd;
-          }
-
-          .badge {
-            display: inline-block;
-            margin: 20px 5px;
-            padding: 10px 20px;
-            border-radius: 25px;
-            background: #22c55e;
-            color: white;
-            font-weight: bold;
-          }
-
-          .info {
-            margin-top: 25px;
-            font-size: 18px;
-            line-height: 1.8;
-          }
-
-          footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #cbd5e1;
-          }
-        </style>
-      </head>
-
-      <body>
-        <div class="container">
-
-          <h1>🚀 Galion DevOps</h1>
-
-          <h2>Cloud Infrastructure Deployment</h2>
-
-          <div>
-            <span class="badge">Terraform AWS</span>
-            <span class="badge">Ansible</span>
-            <span class="badge">Apache</span>
-          </div>
-
-          <div class="info">
-            ✅ Infrastructure deployed successfully<br>
-            ✅ Configuration automated with Ansible<br>
-            ✅ Web server running on Amazon Linux 2023
-          </div>
-
-          <footer>
-            CI/CD Pipeline - Terraform + Checkov + Ansible
-          </footer>
-
-        </div>
-      </body>
-      </html>
+- name: Restart Apache service
+  ansible.builtin.service:
+    name: httpd
+    state: restarted
