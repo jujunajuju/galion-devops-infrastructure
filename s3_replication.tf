@@ -672,6 +672,11 @@ resource "aws_s3_bucket_replication_configuration" "terraform_state_logs_replica
 
   bucket = aws_s3_bucket.terraform_state_logs.id
 
+  depends_on = [
+    aws_s3_bucket_versioning.terraform_state_logs_versioning,
+    aws_s3_bucket_versioning.terraform_state_replica_logs_versioning
+]
+
 
 
   rule {

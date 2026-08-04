@@ -1,0 +1,4358 @@
+{
+  "version": 4,
+  "terraform_version": "1.15.8",
+  "serial": 2,
+  "lineage": "3d1c0ee9-dc4d-1c03-8ce7-193b1c0af321",
+  "outputs": {
+    "ec2_instance_id": {
+      "value": "i-0d62554525cc73c3b",
+      "type": "string"
+    },
+    "ec2_public_ip": {
+      "value": "44.200.16.184",
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "mode": "data",
+      "type": "aws_caller_identity",
+      "name": "current",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "account_id": "867958227579",
+            "arn": "arn:aws:iam::867958227579:user/terraform-user",
+            "id": "867958227579",
+            "user_id": "AIDA4UFSXQJ5W23NV3BAQ"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "terraform_state_replication_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::867958227579:role/galion-devops-terraform-state-replication-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-08-03T23:31:35Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "galion-devops-terraform-state-replication-role",
+            "inline_policy": [
+              {
+                "name": "galion-devops-terraform-state-replication-policy",
+                "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetReplicationConfiguration\",\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::galion-devops-terraform-state\"},{\"Action\":[\"s3:GetObjectVersionForReplication\",\"s3:GetObjectVersionAcl\",\"s3:GetObjectVersionTagging\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::galion-devops-terraform-state/*\"},{\"Action\":[\"s3:ReplicateObject\",\"s3:ReplicateDelete\",\"s3:ReplicateTags\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::galion-devops-terraform-state-replica/*\"},{\"Action\":[\"kms:Encrypt\",\"kms:Decrypt\",\"kms:ReEncrypt*\",\"kms:GenerateDataKey\",\"kms:DescribeKey\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:kms:eu-west-1:867958227579:key/99e431cd-c62d-46ce-b7e1-927c091febe5\"}]}"
+              }
+            ],
+            "managed_policy_arns": [],
+            "max_session_duration": 3600,
+            "name": "galion-devops-terraform-state-replication-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA4UFSXQJ5VKSA67BAI"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "terraform_state_replication_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "galion-devops-terraform-state-replication-role:galion-devops-terraform-state-replication-policy",
+            "name": "galion-devops-terraform-state-replication-policy",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetReplicationConfiguration\",\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::galion-devops-terraform-state\"},{\"Action\":[\"s3:GetObjectVersionForReplication\",\"s3:GetObjectVersionAcl\",\"s3:GetObjectVersionTagging\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::galion-devops-terraform-state/*\"},{\"Action\":[\"s3:ReplicateObject\",\"s3:ReplicateDelete\",\"s3:ReplicateTags\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:s3:::galion-devops-terraform-state-replica/*\"},{\"Action\":[\"kms:Encrypt\",\"kms:Decrypt\",\"kms:ReEncrypt*\",\"kms:GenerateDataKey\",\"kms:DescribeKey\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:kms:eu-west-1:867958227579:key/99e431cd-c62d-46ce-b7e1-927c091febe5\"}]}",
+            "role": "galion-devops-terraform-state-replication-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.terraform_state_replication_role",
+            "aws_kms_key.terraform_state_replica",
+            "aws_s3_bucket.terraform_state",
+            "aws_s3_bucket.terraform_state_replica",
+            "data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_kms_key",
+      "name": "terraform_state",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:kms:us-east-1:867958227579:key/20bc9e07-75c2-4974-8770-591168aa7df0",
+            "bypass_policy_lockout_safety_check": false,
+            "custom_key_store_id": "",
+            "customer_master_key_spec": "SYMMETRIC_DEFAULT",
+            "deletion_window_in_days": null,
+            "description": "KMS key for Terraform state bucket encryption",
+            "enable_key_rotation": true,
+            "id": "20bc9e07-75c2-4974-8770-591168aa7df0",
+            "is_enabled": true,
+            "key_id": "20bc9e07-75c2-4974-8770-591168aa7df0",
+            "key_usage": "ENCRYPT_DECRYPT",
+            "multi_region": false,
+            "policy": "{\"Statement\":[{\"Action\":\"kms:*\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::867958227579:root\"},\"Resource\":\"*\",\"Sid\":\"Enable IAM User Permissions\"}],\"Version\":\"2012-10-17\"}",
+            "rotation_period_in_days": 365,
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state-kms"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state-kms"
+            },
+            "timeouts": null,
+            "xks_key_id": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDB9fQ=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_kms_key",
+      "name": "terraform_state_replica",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:kms:eu-west-1:867958227579:key/99e431cd-c62d-46ce-b7e1-927c091febe5",
+            "bypass_policy_lockout_safety_check": false,
+            "custom_key_store_id": "",
+            "customer_master_key_spec": "SYMMETRIC_DEFAULT",
+            "deletion_window_in_days": null,
+            "description": "KMS key for Terraform state replica encryption",
+            "enable_key_rotation": true,
+            "id": "99e431cd-c62d-46ce-b7e1-927c091febe5",
+            "is_enabled": true,
+            "key_id": "99e431cd-c62d-46ce-b7e1-927c091febe5",
+            "key_usage": "ENCRYPT_DECRYPT",
+            "multi_region": false,
+            "policy": "{\"Statement\":[{\"Action\":\"kms:*\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::867958227579:root\"},\"Resource\":\"*\",\"Sid\":\"Enable IAM User Permissions\"}],\"Version\":\"2012-10-17\"}",
+            "rotation_period_in_days": 365,
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state-replica-kms"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state-replica-kms"
+            },
+            "timeouts": null,
+            "xks_key_id": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDB9fQ==",
+          "dependencies": [
+            "data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "terraform_state",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::galion-devops-terraform-state",
+            "bucket": "galion-devops-terraform-state",
+            "bucket_domain_name": "galion-devops-terraform-state.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "galion-devops-terraform-state.s3.us-east-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "f2c214c4e554d00a79e96e4f18421ba74d072d77edd5437016a1a9cdbf0441d7",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z3AQBSTGFYJSTF",
+            "id": "galion-devops-terraform-state",
+            "lifecycle_rule": [
+              {
+                "abort_incomplete_multipart_upload_days": 7,
+                "enabled": true,
+                "expiration": [],
+                "id": "cleanup-old-state",
+                "noncurrent_version_expiration": [
+                  {
+                    "days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "tags": {},
+                "transition": []
+              }
+            ],
+            "logging": [
+              {
+                "target_bucket": "galion-devops-terraform-state-logs",
+                "target_prefix": "logs/"
+              }
+            ],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "us-east-1",
+            "replication_configuration": [
+              {
+                "role": "arn:aws:iam::867958227579:role/galion-devops-terraform-state-replication-role",
+                "rules": [
+                  {
+                    "delete_marker_replication_status": "Enabled",
+                    "destination": [
+                      {
+                        "access_control_translation": [],
+                        "account_id": "867958227579",
+                        "bucket": "arn:aws:s3:::galion-devops-terraform-state-replica",
+                        "metrics": [],
+                        "replica_kms_key_id": "arn:aws:kms:eu-west-1:867958227579:key/99e431cd-c62d-46ce-b7e1-927c091febe5",
+                        "replication_time": [],
+                        "storage_class": "STANDARD"
+                      }
+                    ],
+                    "filter": [
+                      {
+                        "prefix": null,
+                        "tags": null
+                      }
+                    ],
+                    "id": "terraform-state-replication",
+                    "prefix": "",
+                    "priority": 0,
+                    "source_selection_criteria": [
+                      {
+                        "sse_kms_encrypted_objects": [
+                          {
+                            "enabled": true
+                          }
+                        ]
+                      }
+                    ],
+                    "status": "Enabled"
+                  }
+                ]
+              }
+            ],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "arn:aws:kms:us-east-1:867958227579:key/20bc9e07-75c2-4974-8770-591168aa7df0",
+                        "sse_algorithm": "aws:kms"
+                      }
+                    ],
+                    "bucket_key_enabled": true
+                  }
+                ]
+              }
+            ],
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "terraform_state_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::galion-devops-terraform-state-logs",
+            "bucket": "galion-devops-terraform-state-logs",
+            "bucket_domain_name": "galion-devops-terraform-state-logs.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "galion-devops-terraform-state-logs.s3.us-east-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "f2c214c4e554d00a79e96e4f18421ba74d072d77edd5437016a1a9cdbf0441d7",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z3AQBSTGFYJSTF",
+            "id": "galion-devops-terraform-state-logs",
+            "lifecycle_rule": [
+              {
+                "abort_incomplete_multipart_upload_days": 7,
+                "enabled": true,
+                "expiration": [],
+                "id": "cleanup-old-log-versions",
+                "noncurrent_version_expiration": [
+                  {
+                    "days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "tags": {},
+                "transition": []
+              }
+            ],
+            "logging": [],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "us-east-1",
+            "replication_configuration": [
+              {
+                "role": "arn:aws:iam::867958227579:role/galion-devops-terraform-state-replication-role",
+                "rules": [
+                  {
+                    "delete_marker_replication_status": "Enabled",
+                    "destination": [
+                      {
+                        "access_control_translation": [],
+                        "account_id": "867958227579",
+                        "bucket": "arn:aws:s3:::galion-devops-terraform-state-replica-logs",
+                        "metrics": [],
+                        "replica_kms_key_id": "",
+                        "replication_time": [],
+                        "storage_class": "STANDARD"
+                      }
+                    ],
+                    "filter": [
+                      {
+                        "prefix": null,
+                        "tags": null
+                      }
+                    ],
+                    "id": "terraform-state-logs-replication",
+                    "prefix": "",
+                    "priority": 0,
+                    "source_selection_criteria": [],
+                    "status": "Enabled"
+                  }
+                ]
+              }
+            ],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "arn:aws:kms:us-east-1:867958227579:key/20bc9e07-75c2-4974-8770-591168aa7df0",
+                        "sse_algorithm": "aws:kms"
+                      }
+                    ],
+                    "bucket_key_enabled": true
+                  }
+                ]
+              }
+            ],
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state-logs"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state-logs"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "terraform_state_replica",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::galion-devops-terraform-state-replica",
+            "bucket": "galion-devops-terraform-state-replica",
+            "bucket_domain_name": "galion-devops-terraform-state-replica.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "galion-devops-terraform-state-replica.s3.eu-west-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "f2c214c4e554d00a79e96e4f18421ba74d072d77edd5437016a1a9cdbf0441d7",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z1BKCTXD74EZPE",
+            "id": "galion-devops-terraform-state-replica",
+            "lifecycle_rule": [
+              {
+                "abort_incomplete_multipart_upload_days": 7,
+                "enabled": true,
+                "expiration": [],
+                "id": "cleanup-old-replica",
+                "noncurrent_version_expiration": [
+                  {
+                    "days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "tags": {},
+                "transition": []
+              }
+            ],
+            "logging": [
+              {
+                "target_bucket": "galion-devops-terraform-state-replica-logs",
+                "target_prefix": "logs/"
+              }
+            ],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "eu-west-1",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/99e431cd-c62d-46ce-b7e1-927c091febe5",
+                        "sse_algorithm": "aws:kms"
+                      }
+                    ],
+                    "bucket_key_enabled": true
+                  }
+                ]
+              }
+            ],
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state-replica"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state-replica"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "terraform_state_replica_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::galion-devops-terraform-state-replica-logs",
+            "bucket": "galion-devops-terraform-state-replica-logs",
+            "bucket_domain_name": "galion-devops-terraform-state-replica-logs.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "galion-devops-terraform-state-replica-logs.s3.eu-west-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "f2c214c4e554d00a79e96e4f18421ba74d072d77edd5437016a1a9cdbf0441d7",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z1BKCTXD74EZPE",
+            "id": "galion-devops-terraform-state-replica-logs",
+            "lifecycle_rule": [
+              {
+                "abort_incomplete_multipart_upload_days": 7,
+                "enabled": true,
+                "expiration": [],
+                "id": "cleanup-old-logs",
+                "noncurrent_version_expiration": [
+                  {
+                    "days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "tags": {},
+                "transition": []
+              }
+            ],
+            "logging": [],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "eu-west-1",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/99e431cd-c62d-46ce-b7e1-927c091febe5",
+                        "sse_algorithm": "aws:kms"
+                      }
+                    ],
+                    "bucket_key_enabled": true
+                  }
+                ]
+              }
+            ],
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state-replica-logs"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-terraform-state-replica-logs"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "name": "terraform_state_lifecycle",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state",
+            "rule": [
+              {
+                "abort_incomplete_multipart_upload": [
+                  {
+                    "days_after_initiation": 7
+                  }
+                ],
+                "expiration": [],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "",
+                    "tag": []
+                  }
+                ],
+                "id": "cleanup-old-state",
+                "noncurrent_version_expiration": [
+                  {
+                    "newer_noncurrent_versions": null,
+                    "noncurrent_days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": []
+              }
+            ],
+            "timeouts": null,
+            "transition_default_minimum_object_size": "all_storage_classes_128K"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "aws_s3_bucket.terraform_state"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "name": "terraform_state_logs_lifecycle",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state-logs",
+            "rule": [
+              {
+                "abort_incomplete_multipart_upload": [
+                  {
+                    "days_after_initiation": 7
+                  }
+                ],
+                "expiration": [],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "",
+                    "tag": []
+                  }
+                ],
+                "id": "cleanup-old-log-versions",
+                "noncurrent_version_expiration": [
+                  {
+                    "newer_noncurrent_versions": null,
+                    "noncurrent_days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": []
+              }
+            ],
+            "timeouts": null,
+            "transition_default_minimum_object_size": "all_storage_classes_128K"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "aws_s3_bucket.terraform_state_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "name": "terraform_state_replica_lifecycle",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state-replica",
+            "rule": [
+              {
+                "abort_incomplete_multipart_upload": [
+                  {
+                    "days_after_initiation": 7
+                  }
+                ],
+                "expiration": [],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "",
+                    "tag": []
+                  }
+                ],
+                "id": "cleanup-old-replica",
+                "noncurrent_version_expiration": [
+                  {
+                    "newer_noncurrent_versions": null,
+                    "noncurrent_days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": []
+              }
+            ],
+            "timeouts": null,
+            "transition_default_minimum_object_size": "all_storage_classes_128K"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "aws_s3_bucket.terraform_state_replica"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "name": "terraform_state_replica_logs_lifecycle",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state-replica-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state-replica-logs",
+            "rule": [
+              {
+                "abort_incomplete_multipart_upload": [
+                  {
+                    "days_after_initiation": 7
+                  }
+                ],
+                "expiration": [],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "",
+                    "tag": []
+                  }
+                ],
+                "id": "cleanup-old-logs",
+                "noncurrent_version_expiration": [
+                  {
+                    "newer_noncurrent_versions": null,
+                    "noncurrent_days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": []
+              }
+            ],
+            "timeouts": null,
+            "transition_default_minimum_object_size": "all_storage_classes_128K"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "aws_s3_bucket.terraform_state_replica_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_logging",
+      "name": "terraform_state_logging",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state",
+            "target_bucket": "galion-devops-terraform-state-logs",
+            "target_grant": [],
+            "target_object_key_format": [],
+            "target_prefix": "logs/"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_s3_bucket.terraform_state",
+            "aws_s3_bucket.terraform_state_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_logging",
+      "name": "terraform_state_replica_logging",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state-replica",
+            "target_bucket": "galion-devops-terraform-state-replica-logs",
+            "target_grant": [],
+            "target_object_key_format": [],
+            "target_prefix": "logs/"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_s3_bucket.terraform_state_replica",
+            "aws_s3_bucket.terraform_state_replica_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "terraform_state_logs_public_access_block",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "bucket": "galion-devops-terraform-state-logs",
+            "id": "galion-devops-terraform-state-logs",
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_s3_bucket.terraform_state_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "terraform_state_public_access_block",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "bucket": "galion-devops-terraform-state",
+            "id": "galion-devops-terraform-state",
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_s3_bucket.terraform_state"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "terraform_state_replica_logs_public_access_block",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "bucket": "galion-devops-terraform-state-replica-logs",
+            "id": "galion-devops-terraform-state-replica-logs",
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_s3_bucket.terraform_state_replica_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "terraform_state_replica_public_access_block",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "bucket": "galion-devops-terraform-state-replica",
+            "id": "galion-devops-terraform-state-replica",
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_s3_bucket.terraform_state_replica"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_replication_configuration",
+      "name": "terraform_state_logs_replication",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state-logs",
+            "id": "galion-devops-terraform-state-logs",
+            "role": "arn:aws:iam::867958227579:role/galion-devops-terraform-state-replication-role",
+            "rule": [
+              {
+                "delete_marker_replication": [
+                  {
+                    "status": "Enabled"
+                  }
+                ],
+                "destination": [
+                  {
+                    "access_control_translation": [],
+                    "account": "867958227579",
+                    "bucket": "arn:aws:s3:::galion-devops-terraform-state-replica-logs",
+                    "encryption_configuration": [],
+                    "metrics": [],
+                    "replication_time": [],
+                    "storage_class": "STANDARD"
+                  }
+                ],
+                "existing_object_replication": [],
+                "filter": [
+                  {
+                    "and": [],
+                    "prefix": null,
+                    "tag": []
+                  }
+                ],
+                "id": "terraform-state-logs-replication",
+                "prefix": "",
+                "priority": 0,
+                "source_selection_criteria": [],
+                "status": "Enabled"
+              }
+            ],
+            "token": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "token"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.terraform_state_replication_role",
+            "aws_s3_bucket.terraform_state_logs",
+            "aws_s3_bucket.terraform_state_replica_logs",
+            "data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_replication_configuration",
+      "name": "terraform_state_replication",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state",
+            "id": "galion-devops-terraform-state",
+            "role": "arn:aws:iam::867958227579:role/galion-devops-terraform-state-replication-role",
+            "rule": [
+              {
+                "delete_marker_replication": [
+                  {
+                    "status": "Enabled"
+                  }
+                ],
+                "destination": [
+                  {
+                    "access_control_translation": [],
+                    "account": "867958227579",
+                    "bucket": "arn:aws:s3:::galion-devops-terraform-state-replica",
+                    "encryption_configuration": [
+                      {
+                        "replica_kms_key_id": "arn:aws:kms:eu-west-1:867958227579:key/99e431cd-c62d-46ce-b7e1-927c091febe5"
+                      }
+                    ],
+                    "metrics": [],
+                    "replication_time": [],
+                    "storage_class": "STANDARD"
+                  }
+                ],
+                "existing_object_replication": [],
+                "filter": [
+                  {
+                    "and": [],
+                    "prefix": null,
+                    "tag": []
+                  }
+                ],
+                "id": "terraform-state-replication",
+                "prefix": "",
+                "priority": 0,
+                "source_selection_criteria": [
+                  {
+                    "replica_modifications": [],
+                    "sse_kms_encrypted_objects": [
+                      {
+                        "status": "Enabled"
+                      }
+                    ]
+                  }
+                ],
+                "status": "Enabled"
+              }
+            ],
+            "token": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "token"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.terraform_state_replication_role",
+            "aws_kms_key.terraform_state_replica",
+            "aws_s3_bucket.terraform_state",
+            "aws_s3_bucket.terraform_state_replica",
+            "data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "terraform_state_encryption",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state",
+            "rule": [
+              {
+                "apply_server_side_encryption_by_default": [
+                  {
+                    "kms_master_key_id": "arn:aws:kms:us-east-1:867958227579:key/20bc9e07-75c2-4974-8770-591168aa7df0",
+                    "sse_algorithm": "aws:kms"
+                  }
+                ],
+                "bucket_key_enabled": true
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_kms_key.terraform_state",
+            "aws_s3_bucket.terraform_state"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "terraform_state_logs_encryption",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state-logs",
+            "rule": [
+              {
+                "apply_server_side_encryption_by_default": [
+                  {
+                    "kms_master_key_id": "arn:aws:kms:us-east-1:867958227579:key/20bc9e07-75c2-4974-8770-591168aa7df0",
+                    "sse_algorithm": "aws:kms"
+                  }
+                ],
+                "bucket_key_enabled": true
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_kms_key.terraform_state",
+            "aws_s3_bucket.terraform_state_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "terraform_state_replica_encryption",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state-replica",
+            "rule": [
+              {
+                "apply_server_side_encryption_by_default": [
+                  {
+                    "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/99e431cd-c62d-46ce-b7e1-927c091febe5",
+                    "sse_algorithm": "aws:kms"
+                  }
+                ],
+                "bucket_key_enabled": true
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_kms_key.terraform_state_replica",
+            "aws_s3_bucket.terraform_state_replica",
+            "data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "terraform_state_replica_logs_encryption",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state-replica-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state-replica-logs",
+            "rule": [
+              {
+                "apply_server_side_encryption_by_default": [
+                  {
+                    "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/99e431cd-c62d-46ce-b7e1-927c091febe5",
+                    "sse_algorithm": "aws:kms"
+                  }
+                ],
+                "bucket_key_enabled": true
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_kms_key.terraform_state_replica",
+            "aws_s3_bucket.terraform_state_replica_logs",
+            "data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_versioning",
+      "name": "terraform_state_logs_versioning",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state-logs",
+            "mfa": null,
+            "versioning_configuration": [
+              {
+                "mfa_delete": "",
+                "status": "Enabled"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_s3_bucket.terraform_state_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_versioning",
+      "name": "terraform_state_replica_logs_versioning",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state-replica-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state-replica-logs",
+            "mfa": null,
+            "versioning_configuration": [
+              {
+                "mfa_delete": "",
+                "status": "Enabled"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_s3_bucket.terraform_state_replica_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_versioning",
+      "name": "terraform_state_replica_versioning",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state-replica",
+            "mfa": null,
+            "versioning_configuration": [
+              {
+                "mfa_delete": "",
+                "status": "Enabled"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_s3_bucket.terraform_state_replica"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket_versioning",
+      "name": "terraform_state_versioning",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-terraform-state",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-terraform-state",
+            "mfa": null,
+            "versioning_configuration": [
+              {
+                "mfa_delete": "",
+                "status": "Enabled"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_s3_bucket.terraform_state"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "data",
+      "type": "aws_caller_identity",
+      "name": "current",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "account_id": "867958227579",
+            "arn": "arn:aws:iam::867958227579:user/terraform-user",
+            "id": "867958227579",
+            "user_id": "AIDA4UFSXQJ5W23NV3BAQ"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "managed",
+      "type": "aws_cloudwatch_log_group",
+      "name": "vpc_flow_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:logs:us-east-1:867958227579:log-group:/aws/vpc/dev/flowlogs",
+            "id": "/aws/vpc/dev/flowlogs",
+            "kms_key_id": "arn:aws:kms:us-east-1:867958227579:key/a951a0f4-4424-4320-8477-e6acbc2cbf4b",
+            "log_group_class": "STANDARD",
+            "name": "/aws/vpc/dev/flowlogs",
+            "name_prefix": "",
+            "retention_in_days": 365,
+            "skip_destroy": false,
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.aws_vpc.aws_kms_key.cloudwatch_logs",
+            "module.aws_vpc.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "managed",
+      "type": "aws_default_security_group",
+      "name": "default",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:867958227579:security-group/sg-0310e78a342579027",
+            "description": "default VPC security group",
+            "egress": [],
+            "id": "sg-0310e78a342579027",
+            "ingress": [],
+            "name": "default",
+            "name_prefix": "",
+            "owner_id": "867958227579",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "dev-default-sg-restricted"
+            },
+            "tags_all": {
+              "Name": "dev-default-sg-restricted"
+            },
+            "vpc_id": "vpc-0c4855921be09b62d"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "module.aws_vpc.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "managed",
+      "type": "aws_flow_log",
+      "name": "vpc_flow_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:867958227579:vpc-flow-log/fl-0efafc6237f8e2a41",
+            "deliver_cross_account_role": "",
+            "destination_options": [],
+            "eni_id": null,
+            "iam_role_arn": "arn:aws:iam::867958227579:role/dev-vpc-flow-logs-role",
+            "id": "fl-0efafc6237f8e2a41",
+            "log_destination": "arn:aws:logs:us-east-1:867958227579:log-group:/aws/vpc/dev/flowlogs",
+            "log_destination_type": "cloud-watch-logs",
+            "log_format": "${version} ${account-id} ${interface-id} ${srcaddr} ${dstaddr} ${srcport} ${dstport} ${protocol} ${packets} ${bytes} ${start} ${end} ${action} ${log-status}",
+            "log_group_name": "/aws/vpc/dev/flowlogs",
+            "max_aggregation_interval": 600,
+            "subnet_id": null,
+            "tags": {},
+            "tags_all": {},
+            "traffic_type": "ALL",
+            "transit_gateway_attachment_id": null,
+            "transit_gateway_id": null,
+            "vpc_id": "vpc-0c4855921be09b62d"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.aws_vpc.aws_cloudwatch_log_group.vpc_flow_logs",
+            "module.aws_vpc.aws_iam_role.vpc_flow_logs_role",
+            "module.aws_vpc.aws_kms_key.cloudwatch_logs",
+            "module.aws_vpc.aws_vpc.main",
+            "module.aws_vpc.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "vpc_flow_logs_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::867958227579:role/dev-vpc-flow-logs-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"vpc-flow-logs.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-08-03T23:31:33Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "dev-vpc-flow-logs-role",
+            "inline_policy": [
+              {
+                "name": "dev-vpc-flow-logs-policy",
+                "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"logs:CreateLogStream\",\"logs:PutLogEvents\",\"logs:DescribeLogGroups\",\"logs:DescribeLogStreams\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:logs:us-east-1:867958227579:log-group:/aws/vpc/dev/flowlogs:*\"},{\"Action\":[\"logs:CreateLogGroup\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:logs:us-east-1:867958227579:log-group:/aws/vpc/dev/flowlogs\"}]}"
+              }
+            ],
+            "managed_policy_arns": [],
+            "max_session_duration": 3600,
+            "name": "dev-vpc-flow-logs-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA4UFSXQJ5SYWJHZGCC"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "vpc_flow_logs_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "dev-vpc-flow-logs-role:dev-vpc-flow-logs-policy",
+            "name": "dev-vpc-flow-logs-policy",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"logs:CreateLogStream\",\"logs:PutLogEvents\",\"logs:DescribeLogGroups\",\"logs:DescribeLogStreams\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:logs:us-east-1:867958227579:log-group:/aws/vpc/dev/flowlogs:*\"},{\"Action\":[\"logs:CreateLogGroup\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:logs:us-east-1:867958227579:log-group:/aws/vpc/dev/flowlogs\"}]}",
+            "role": "dev-vpc-flow-logs-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.aws_vpc.aws_cloudwatch_log_group.vpc_flow_logs",
+            "module.aws_vpc.aws_iam_role.vpc_flow_logs_role",
+            "module.aws_vpc.aws_kms_key.cloudwatch_logs",
+            "module.aws_vpc.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "managed",
+      "type": "aws_internet_gateway",
+      "name": "igw",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:867958227579:internet-gateway/igw-0d11ea1d0cbf20772",
+            "id": "igw-0d11ea1d0cbf20772",
+            "owner_id": "867958227579",
+            "tags": {
+              "Name": "dev-igw"
+            },
+            "tags_all": {
+              "Name": "dev-igw"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0c4855921be09b62d"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.aws_vpc.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "managed",
+      "type": "aws_kms_key",
+      "name": "cloudwatch_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:kms:us-east-1:867958227579:key/a951a0f4-4424-4320-8477-e6acbc2cbf4b",
+            "bypass_policy_lockout_safety_check": false,
+            "custom_key_store_id": "",
+            "customer_master_key_spec": "SYMMETRIC_DEFAULT",
+            "deletion_window_in_days": null,
+            "description": "KMS key for VPC Flow Logs CloudWatch encryption",
+            "enable_key_rotation": true,
+            "id": "a951a0f4-4424-4320-8477-e6acbc2cbf4b",
+            "is_enabled": true,
+            "key_id": "a951a0f4-4424-4320-8477-e6acbc2cbf4b",
+            "key_usage": "ENCRYPT_DECRYPT",
+            "multi_region": false,
+            "policy": "{\"Statement\":[{\"Action\":\"kms:*\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::867958227579:root\"},\"Resource\":\"*\",\"Sid\":\"EnableRootPermissions\"},{\"Action\":[\"kms:Encrypt\",\"kms:Decrypt\",\"kms:ReEncrypt*\",\"kms:GenerateDataKey*\",\"kms:DescribeKey\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"logs.us-east-1.amazonaws.com\"},\"Resource\":\"*\",\"Sid\":\"AllowCloudWatchLogs\"}],\"Version\":\"2012-10-17\"}",
+            "rotation_period_in_days": 365,
+            "tags": {},
+            "tags_all": {},
+            "timeouts": null,
+            "xks_key_id": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDB9fQ==",
+          "dependencies": [
+            "module.aws_vpc.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "managed",
+      "type": "aws_route_table",
+      "name": "public",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:867958227579:route-table/rtb-0ed510603e6183486",
+            "id": "rtb-0ed510603e6183486",
+            "owner_id": "867958227579",
+            "propagating_vgws": [],
+            "route": [
+              {
+                "carrier_gateway_id": "",
+                "cidr_block": "0.0.0.0/0",
+                "core_network_arn": "",
+                "destination_prefix_list_id": "",
+                "egress_only_gateway_id": "",
+                "gateway_id": "igw-0d11ea1d0cbf20772",
+                "ipv6_cidr_block": "",
+                "local_gateway_id": "",
+                "nat_gateway_id": "",
+                "network_interface_id": "",
+                "transit_gateway_id": "",
+                "vpc_endpoint_id": "",
+                "vpc_peering_connection_id": ""
+              }
+            ],
+            "tags": {
+              "Name": "dev-public-route-table"
+            },
+            "tags_all": {
+              "Name": "dev-public-route-table"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0c4855921be09b62d"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.aws_vpc.aws_internet_gateway.igw",
+            "module.aws_vpc.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "managed",
+      "type": "aws_route_table_association",
+      "name": "public",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": "",
+            "id": "rtbassoc-0444425cb3ebbb4c8",
+            "route_table_id": "rtb-0ed510603e6183486",
+            "subnet_id": "subnet-0c833efc3944a1f5d",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.aws_vpc.aws_internet_gateway.igw",
+            "module.aws_vpc.aws_route_table.public",
+            "module.aws_vpc.aws_subnet.public",
+            "module.aws_vpc.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "managed",
+      "type": "aws_subnet",
+      "name": "public",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:867958227579:subnet/subnet-0c833efc3944a1f5d",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "us-east-1a",
+            "availability_zone_id": "use1-az1",
+            "cidr_block": "10.0.1.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-0c833efc3944a1f5d",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": true,
+            "outpost_arn": "",
+            "owner_id": "867958227579",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "dev-public-subnet"
+            },
+            "tags_all": {
+              "Name": "dev-public-subnet"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0c4855921be09b62d"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.aws_vpc.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.aws_vpc",
+      "mode": "managed",
+      "type": "aws_vpc",
+      "name": "main",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:867958227579:vpc/vpc-0c4855921be09b62d",
+            "assign_generated_ipv6_cidr_block": false,
+            "cidr_block": "10.0.0.0/16",
+            "default_network_acl_id": "acl-0be8943a6b04741b5",
+            "default_route_table_id": "rtb-0e9a78288295490f1",
+            "default_security_group_id": "sg-0310e78a342579027",
+            "dhcp_options_id": "dopt-0364752ded44ecb55",
+            "enable_dns_hostnames": true,
+            "enable_dns_support": true,
+            "enable_network_address_usage_metrics": false,
+            "id": "vpc-0c4855921be09b62d",
+            "instance_tenancy": "default",
+            "ipv4_ipam_pool_id": null,
+            "ipv4_netmask_length": null,
+            "ipv6_association_id": "",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_network_border_group": "",
+            "ipv6_ipam_pool_id": "",
+            "ipv6_netmask_length": 0,
+            "main_route_table_id": "rtb-0e9a78288295490f1",
+            "owner_id": "867958227579",
+            "tags": {
+              "Name": "dev-vpc"
+            },
+            "tags_all": {
+              "Name": "dev-vpc"
+            }
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ=="
+        }
+      ]
+    },
+    {
+      "module": "module.ec2",
+      "mode": "data",
+      "type": "aws_ssm_parameter",
+      "name": "amazon_linux",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ssm:us-east-1::parameter/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64",
+            "id": "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64",
+            "insecure_value": "ami-0006118602dfc1c09",
+            "name": "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64",
+            "type": "String",
+            "value": "ami-0006118602dfc1c09",
+            "version": 182,
+            "with_decryption": true
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "value"
+              }
+            ]
+          ],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.ec2",
+      "mode": "managed",
+      "type": "aws_iam_instance_profile",
+      "name": "ec2_profile",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::867958227579:instance-profile/galion-devops-dev-ec2-profile",
+            "create_date": "2026-08-03T23:31:49Z",
+            "id": "galion-devops-dev-ec2-profile",
+            "name": "galion-devops-dev-ec2-profile",
+            "name_prefix": "",
+            "path": "/",
+            "role": "galion-devops-dev-ec2-role",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AIPA4UFSXQJ5RBZPG36YN"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.ec2.aws_iam_role.ec2_role"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.ec2",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "ec2_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::867958227579:role/galion-devops-dev-ec2-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-08-03T23:31:35Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "galion-devops-dev-ec2-role",
+            "inline_policy": [],
+            "managed_policy_arns": [
+              "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+            ],
+            "max_session_duration": 3600,
+            "name": "galion-devops-dev-ec2-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA4UFSXQJ5TBSHN6NRP"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.ec2",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "ssm",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "galion-devops-dev-ec2-role-20260803233149468300000001",
+            "policy_arn": "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+            "role": "galion-devops-dev-ec2-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.ec2.aws_iam_role.ec2_role"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.ec2",
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "ec2",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "ami": "ami-0006118602dfc1c09",
+            "arn": "arn:aws:ec2:us-east-1:867958227579:instance/i-0d62554525cc73c3b",
+            "associate_public_ip_address": true,
+            "availability_zone": "us-east-1a",
+            "capacity_reservation_specification": [
+              {
+                "capacity_reservation_preference": "open",
+                "capacity_reservation_target": []
+              }
+            ],
+            "cpu_core_count": 1,
+            "cpu_options": [
+              {
+                "amd_sev_snp": "",
+                "core_count": 1,
+                "threads_per_core": 2
+              }
+            ],
+            "cpu_threads_per_core": 2,
+            "credit_specification": [
+              {
+                "cpu_credits": "unlimited"
+              }
+            ],
+            "disable_api_stop": false,
+            "disable_api_termination": false,
+            "ebs_block_device": [],
+            "ebs_optimized": true,
+            "enable_primary_ipv6": null,
+            "enclave_options": [
+              {
+                "enabled": false
+              }
+            ],
+            "ephemeral_block_device": [],
+            "get_password_data": false,
+            "hibernation": false,
+            "host_id": "",
+            "host_resource_group_arn": null,
+            "iam_instance_profile": "galion-devops-dev-ec2-profile",
+            "id": "i-0d62554525cc73c3b",
+            "instance_initiated_shutdown_behavior": "stop",
+            "instance_lifecycle": "",
+            "instance_market_options": [],
+            "instance_state": "running",
+            "instance_type": "t3.micro",
+            "ipv6_address_count": 0,
+            "ipv6_addresses": [],
+            "key_name": "galion-devops-key",
+            "launch_template": [],
+            "maintenance_options": [
+              {
+                "auto_recovery": "default"
+              }
+            ],
+            "metadata_options": [
+              {
+                "http_endpoint": "enabled",
+                "http_protocol_ipv6": "disabled",
+                "http_put_response_hop_limit": 2,
+                "http_tokens": "required",
+                "instance_metadata_tags": "disabled"
+              }
+            ],
+            "monitoring": true,
+            "network_interface": [],
+            "outpost_arn": "",
+            "password_data": "",
+            "placement_group": "",
+            "placement_partition_number": 0,
+            "primary_network_interface_id": "eni-05f6b5aa62e37a9a8",
+            "private_dns": "ip-10-0-1-33.ec2.internal",
+            "private_dns_name_options": [
+              {
+                "enable_resource_name_dns_a_record": false,
+                "enable_resource_name_dns_aaaa_record": false,
+                "hostname_type": "ip-name"
+              }
+            ],
+            "private_ip": "10.0.1.33",
+            "public_dns": "ec2-44-200-16-184.compute-1.amazonaws.com",
+            "public_ip": "44.200.16.184",
+            "root_block_device": [
+              {
+                "delete_on_termination": true,
+                "device_name": "/dev/xvda",
+                "encrypted": true,
+                "iops": 3000,
+                "kms_key_id": "arn:aws:kms:us-east-1:867958227579:key/8e6c3767-69e9-4456-8785-7c0b35949850",
+                "tags": {},
+                "tags_all": {},
+                "throughput": 125,
+                "volume_id": "vol-09fb9b5296b69d19c",
+                "volume_size": 8,
+                "volume_type": "gp3"
+              }
+            ],
+            "secondary_private_ips": [],
+            "security_groups": [],
+            "source_dest_check": true,
+            "spot_instance_request_id": "",
+            "subnet_id": "subnet-0c833efc3944a1f5d",
+            "tags": {
+              "Name": "galion-devops-dev-ec2"
+            },
+            "tags_all": {
+              "Name": "galion-devops-dev-ec2"
+            },
+            "tenancy": "default",
+            "timeouts": null,
+            "user_data": "79425ac7b474e026d7a6648327530ff86720246b",
+            "user_data_base64": null,
+            "user_data_replace_on_change": false,
+            "volume_tags": null,
+            "vpc_security_group_ids": [
+              "sg-040c5a9102e56015f"
+            ]
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "ami"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMCwicmVhZCI6OTAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.aws_vpc.aws_subnet.public",
+            "module.aws_vpc.aws_vpc.main",
+            "module.ec2.aws_iam_instance_profile.ec2_profile",
+            "module.ec2.aws_iam_role.ec2_role",
+            "module.ec2.aws_security_group.ec2",
+            "module.ec2.data.aws_ssm_parameter.amazon_linux"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.ec2",
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "ec2",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:867958227579:security-group/sg-040c5a9102e56015f",
+            "description": "Security group for EC2 instance",
+            "egress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "Allow outbound traffic",
+                "from_port": 0,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "-1",
+                "security_groups": [],
+                "self": false,
+                "to_port": 0
+              }
+            ],
+            "id": "sg-040c5a9102e56015f",
+            "ingress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "HTTP access",
+                "from_port": 80,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 80
+              },
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "SSH access",
+                "from_port": 22,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 22
+              }
+            ],
+            "name": "galion-devops-dev-sg",
+            "name_prefix": "",
+            "owner_id": "867958227579",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "galion-devops-dev-sg"
+            },
+            "tags_all": {
+              "Name": "galion-devops-dev-sg"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0c4855921be09b62d"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "module.aws_vpc.aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "data",
+      "type": "aws_caller_identity",
+      "name": "current",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "account_id": "867958227579",
+            "arn": "arn:aws:iam::867958227579:user/terraform-user",
+            "id": "867958227579",
+            "user_id": "AIDA4UFSXQJ5W23NV3BAQ"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "s3_replication_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::867958227579:role/galion-devops-dev-s3-replication-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-08-03T23:31:33Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "galion-devops-dev-s3-replication-role",
+            "inline_policy": [
+              {
+                "name": "galion-devops-dev-s3-replication-policy",
+                "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetReplicationConfiguration\",\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:s3:::galion-devops-dev-bucket\",\"arn:aws:s3:::galion-devops-dev-logs\",\"arn:aws:s3:::galion-devops-dev-replica-logs\"]},{\"Action\":[\"s3:GetObjectVersion\",\"s3:GetObjectVersionAcl\",\"s3:GetObjectVersionForReplication\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:s3:::galion-devops-dev-bucket/*\",\"arn:aws:s3:::galion-devops-dev-logs/*\",\"arn:aws:s3:::galion-devops-dev-replica-logs/*\"]},{\"Action\":[\"s3:ReplicateObject\",\"s3:ReplicateDelete\",\"s3:ReplicateTags\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:s3:::galion-devops-dev-replica/*\",\"arn:aws:s3:::galion-devops-dev-logs-replica/*\",\"arn:aws:s3:::galion-devops-dev-replica-logs-backup/*\"]},{\"Action\":[\"kms:Decrypt\",\"kms:Encrypt\",\"kms:GenerateDataKey\",\"kms:DescribeKey\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:kms:us-east-1:867958227579:key/60c845a3-3288-47de-9cfa-0d9467a75eb5\",\"arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3\"]}]}"
+              }
+            ],
+            "managed_policy_arns": [],
+            "max_session_duration": 3600,
+            "name": "galion-devops-dev-s3-replication-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA4UFSXQJ5TOWGUYTDB"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "s3_replication_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "galion-devops-dev-s3-replication-role:galion-devops-dev-s3-replication-policy",
+            "name": "galion-devops-dev-s3-replication-policy",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetReplicationConfiguration\",\"s3:ListBucket\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:s3:::galion-devops-dev-bucket\",\"arn:aws:s3:::galion-devops-dev-logs\",\"arn:aws:s3:::galion-devops-dev-replica-logs\"]},{\"Action\":[\"s3:GetObjectVersion\",\"s3:GetObjectVersionAcl\",\"s3:GetObjectVersionForReplication\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:s3:::galion-devops-dev-bucket/*\",\"arn:aws:s3:::galion-devops-dev-logs/*\",\"arn:aws:s3:::galion-devops-dev-replica-logs/*\"]},{\"Action\":[\"s3:ReplicateObject\",\"s3:ReplicateDelete\",\"s3:ReplicateTags\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:s3:::galion-devops-dev-replica/*\",\"arn:aws:s3:::galion-devops-dev-logs-replica/*\",\"arn:aws:s3:::galion-devops-dev-replica-logs-backup/*\"]},{\"Action\":[\"kms:Decrypt\",\"kms:Encrypt\",\"kms:GenerateDataKey\",\"kms:DescribeKey\"],\"Effect\":\"Allow\",\"Resource\":[\"arn:aws:kms:us-east-1:867958227579:key/60c845a3-3288-47de-9cfa-0d9467a75eb5\",\"arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3\"]}]}",
+            "role": "galion-devops-dev-s3-replication-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_iam_role.s3_replication_role",
+            "module.s3.aws_kms_key.s3",
+            "module.s3.aws_kms_key.s3_replica",
+            "module.s3.aws_s3_bucket.bucket",
+            "module.s3.aws_s3_bucket.logs",
+            "module.s3.aws_s3_bucket.logs_replica",
+            "module.s3.aws_s3_bucket.replica",
+            "module.s3.aws_s3_bucket.replica_logs",
+            "module.s3.aws_s3_bucket.replica_logs_backup",
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_kms_key",
+      "name": "s3",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:kms:us-east-1:867958227579:key/60c845a3-3288-47de-9cfa-0d9467a75eb5",
+            "bypass_policy_lockout_safety_check": false,
+            "custom_key_store_id": "",
+            "customer_master_key_spec": "SYMMETRIC_DEFAULT",
+            "deletion_window_in_days": null,
+            "description": "KMS key for S3 bucket encryption",
+            "enable_key_rotation": true,
+            "id": "60c845a3-3288-47de-9cfa-0d9467a75eb5",
+            "is_enabled": true,
+            "key_id": "60c845a3-3288-47de-9cfa-0d9467a75eb5",
+            "key_usage": "ENCRYPT_DECRYPT",
+            "multi_region": false,
+            "policy": "{\"Statement\":[{\"Action\":\"kms:*\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::867958227579:root\"},\"Resource\":\"*\",\"Sid\":\"EnableRootPermissions\"},{\"Action\":[\"kms:Encrypt\",\"kms:Decrypt\",\"kms:GenerateDataKey\",\"kms:DescribeKey\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Resource\":\"*\",\"Sid\":\"AllowS3Service\"}],\"Version\":\"2012-10-17\"}",
+            "rotation_period_in_days": 365,
+            "tags": {},
+            "tags_all": {},
+            "timeouts": null,
+            "xks_key_id": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDB9fQ==",
+          "dependencies": [
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_kms_key",
+      "name": "s3_replica",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+            "bypass_policy_lockout_safety_check": false,
+            "custom_key_store_id": "",
+            "customer_master_key_spec": "SYMMETRIC_DEFAULT",
+            "deletion_window_in_days": null,
+            "description": "KMS key for S3 replica encryption",
+            "enable_key_rotation": true,
+            "id": "8e213718-7074-4c4d-a6a2-2c9380e832c3",
+            "is_enabled": true,
+            "key_id": "8e213718-7074-4c4d-a6a2-2c9380e832c3",
+            "key_usage": "ENCRYPT_DECRYPT",
+            "multi_region": false,
+            "policy": "{\"Statement\":[{\"Action\":\"kms:*\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::867958227579:root\"},\"Resource\":\"*\",\"Sid\":\"EnableRootPermissions\"},{\"Action\":[\"kms:Encrypt\",\"kms:Decrypt\",\"kms:GenerateDataKey\",\"kms:DescribeKey\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"s3.amazonaws.com\"},\"Resource\":\"*\",\"Sid\":\"AllowS3Replication\"}],\"Version\":\"2012-10-17\"}",
+            "rotation_period_in_days": 365,
+            "tags": {},
+            "tags_all": {},
+            "timeouts": null,
+            "xks_key_id": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDB9fQ==",
+          "dependencies": [
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "bucket",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::galion-devops-dev-bucket",
+            "bucket": "galion-devops-dev-bucket",
+            "bucket_domain_name": "galion-devops-dev-bucket.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "galion-devops-dev-bucket.s3.us-east-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "f2c214c4e554d00a79e96e4f18421ba74d072d77edd5437016a1a9cdbf0441d7",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z3AQBSTGFYJSTF",
+            "id": "galion-devops-dev-bucket",
+            "lifecycle_rule": [
+              {
+                "abort_incomplete_multipart_upload_days": 7,
+                "enabled": true,
+                "expiration": [
+                  {
+                    "date": "",
+                    "days": 365,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "id": "lifecycle-rule",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "tags": {},
+                "transition": [
+                  {
+                    "date": "",
+                    "days": 30,
+                    "storage_class": "STANDARD_IA"
+                  }
+                ]
+              }
+            ],
+            "logging": [
+              {
+                "target_bucket": "galion-devops-dev-logs",
+                "target_prefix": "access-logs/"
+              }
+            ],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "us-east-1",
+            "replication_configuration": [
+              {
+                "role": "arn:aws:iam::867958227579:role/galion-devops-dev-s3-replication-role",
+                "rules": [
+                  {
+                    "delete_marker_replication_status": "Enabled",
+                    "destination": [
+                      {
+                        "access_control_translation": [],
+                        "account_id": "",
+                        "bucket": "arn:aws:s3:::galion-devops-dev-replica",
+                        "metrics": [],
+                        "replica_kms_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+                        "replication_time": [],
+                        "storage_class": "STANDARD"
+                      }
+                    ],
+                    "filter": [
+                      {
+                        "prefix": null,
+                        "tags": null
+                      }
+                    ],
+                    "id": "replication-rule",
+                    "prefix": "",
+                    "priority": 0,
+                    "source_selection_criteria": [
+                      {
+                        "sse_kms_encrypted_objects": [
+                          {
+                            "enabled": true
+                          }
+                        ]
+                      }
+                    ],
+                    "status": "Enabled"
+                  }
+                ]
+              }
+            ],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "arn:aws:kms:us-east-1:867958227579:key/60c845a3-3288-47de-9cfa-0d9467a75eb5",
+                        "sse_algorithm": "aws:kms"
+                      }
+                    ],
+                    "bucket_key_enabled": false
+                  }
+                ]
+              }
+            ],
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-bucket"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-bucket"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::galion-devops-dev-logs",
+            "bucket": "galion-devops-dev-logs",
+            "bucket_domain_name": "galion-devops-dev-logs.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "galion-devops-dev-logs.s3.us-east-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "f2c214c4e554d00a79e96e4f18421ba74d072d77edd5437016a1a9cdbf0441d7",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z3AQBSTGFYJSTF",
+            "id": "galion-devops-dev-logs",
+            "lifecycle_rule": [
+              {
+                "abort_incomplete_multipart_upload_days": 7,
+                "enabled": true,
+                "expiration": [
+                  {
+                    "date": "",
+                    "days": 365,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "id": "cleanup-old-log-files",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "tags": {},
+                "transition": [
+                  {
+                    "date": "",
+                    "days": 30,
+                    "storage_class": "STANDARD_IA"
+                  }
+                ]
+              }
+            ],
+            "logging": [],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "us-east-1",
+            "replication_configuration": [
+              {
+                "role": "arn:aws:iam::867958227579:role/galion-devops-dev-s3-replication-role",
+                "rules": [
+                  {
+                    "delete_marker_replication_status": "Enabled",
+                    "destination": [
+                      {
+                        "access_control_translation": [],
+                        "account_id": "",
+                        "bucket": "arn:aws:s3:::galion-devops-dev-logs-replica",
+                        "metrics": [],
+                        "replica_kms_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+                        "replication_time": [],
+                        "storage_class": "STANDARD"
+                      }
+                    ],
+                    "filter": [
+                      {
+                        "prefix": null,
+                        "tags": null
+                      }
+                    ],
+                    "id": "logs-replication-rule",
+                    "prefix": "",
+                    "priority": 0,
+                    "source_selection_criteria": [
+                      {
+                        "sse_kms_encrypted_objects": [
+                          {
+                            "enabled": true
+                          }
+                        ]
+                      }
+                    ],
+                    "status": "Enabled"
+                  }
+                ]
+              }
+            ],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "arn:aws:kms:us-east-1:867958227579:key/60c845a3-3288-47de-9cfa-0d9467a75eb5",
+                        "sse_algorithm": "aws:kms"
+                      }
+                    ],
+                    "bucket_key_enabled": false
+                  }
+                ]
+              }
+            ],
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-logs"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-logs"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "logs_replica",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::galion-devops-dev-logs-replica",
+            "bucket": "galion-devops-dev-logs-replica",
+            "bucket_domain_name": "galion-devops-dev-logs-replica.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "galion-devops-dev-logs-replica.s3.eu-west-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "f2c214c4e554d00a79e96e4f18421ba74d072d77edd5437016a1a9cdbf0441d7",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z1BKCTXD74EZPE",
+            "id": "galion-devops-dev-logs-replica",
+            "lifecycle_rule": [
+              {
+                "abort_incomplete_multipart_upload_days": 7,
+                "enabled": true,
+                "expiration": [
+                  {
+                    "date": "",
+                    "days": 365,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "id": "cleanup-old-replica-log-files",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "tags": {},
+                "transition": [
+                  {
+                    "date": "",
+                    "days": 30,
+                    "storage_class": "STANDARD_IA"
+                  }
+                ]
+              }
+            ],
+            "logging": [
+              {
+                "target_bucket": "galion-devops-dev-replica-logs-backup",
+                "target_prefix": "logs-replica-access-logs/"
+              }
+            ],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "eu-west-1",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+                        "sse_algorithm": "aws:kms"
+                      }
+                    ],
+                    "bucket_key_enabled": false
+                  }
+                ]
+              }
+            ],
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-logs-replica"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-logs-replica"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "replica",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::galion-devops-dev-replica",
+            "bucket": "galion-devops-dev-replica",
+            "bucket_domain_name": "galion-devops-dev-replica.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "galion-devops-dev-replica.s3.eu-west-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "f2c214c4e554d00a79e96e4f18421ba74d072d77edd5437016a1a9cdbf0441d7",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z1BKCTXD74EZPE",
+            "id": "galion-devops-dev-replica",
+            "lifecycle_rule": [
+              {
+                "abort_incomplete_multipart_upload_days": 7,
+                "enabled": true,
+                "expiration": [],
+                "id": "cleanup-old-replica-versions",
+                "noncurrent_version_expiration": [
+                  {
+                    "days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "tags": {},
+                "transition": []
+              }
+            ],
+            "logging": [
+              {
+                "target_bucket": "galion-devops-dev-replica-logs",
+                "target_prefix": "replica-access-logs/"
+              }
+            ],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "eu-west-1",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+                        "sse_algorithm": "aws:kms"
+                      }
+                    ],
+                    "bucket_key_enabled": false
+                  }
+                ]
+              }
+            ],
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-replica"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-replica"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "replica_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::galion-devops-dev-replica-logs",
+            "bucket": "galion-devops-dev-replica-logs",
+            "bucket_domain_name": "galion-devops-dev-replica-logs.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "galion-devops-dev-replica-logs.s3.eu-west-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "f2c214c4e554d00a79e96e4f18421ba74d072d77edd5437016a1a9cdbf0441d7",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z1BKCTXD74EZPE",
+            "id": "galion-devops-dev-replica-logs",
+            "lifecycle_rule": [
+              {
+                "abort_incomplete_multipart_upload_days": 7,
+                "enabled": true,
+                "expiration": [],
+                "id": "cleanup-old-replica-log-versions",
+                "noncurrent_version_expiration": [
+                  {
+                    "days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "tags": {},
+                "transition": []
+              }
+            ],
+            "logging": [],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "eu-west-1",
+            "replication_configuration": [
+              {
+                "role": "arn:aws:iam::867958227579:role/galion-devops-dev-s3-replication-role",
+                "rules": [
+                  {
+                    "delete_marker_replication_status": "Enabled",
+                    "destination": [
+                      {
+                        "access_control_translation": [],
+                        "account_id": "",
+                        "bucket": "arn:aws:s3:::galion-devops-dev-replica-logs-backup",
+                        "metrics": [],
+                        "replica_kms_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+                        "replication_time": [],
+                        "storage_class": "STANDARD"
+                      }
+                    ],
+                    "filter": [
+                      {
+                        "prefix": null,
+                        "tags": null
+                      }
+                    ],
+                    "id": "replica-logs-replication-rule",
+                    "prefix": "",
+                    "priority": 0,
+                    "source_selection_criteria": [
+                      {
+                        "sse_kms_encrypted_objects": [
+                          {
+                            "enabled": true
+                          }
+                        ]
+                      }
+                    ],
+                    "status": "Enabled"
+                  }
+                ]
+              }
+            ],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+                        "sse_algorithm": "aws:kms"
+                      }
+                    ],
+                    "bucket_key_enabled": false
+                  }
+                ]
+              }
+            ],
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-replica-logs"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-replica-logs"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "replica_logs_backup",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::galion-devops-dev-replica-logs-backup",
+            "bucket": "galion-devops-dev-replica-logs-backup",
+            "bucket_domain_name": "galion-devops-dev-replica-logs-backup.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "galion-devops-dev-replica-logs-backup.s3.eu-west-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "f2c214c4e554d00a79e96e4f18421ba74d072d77edd5437016a1a9cdbf0441d7",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z1BKCTXD74EZPE",
+            "id": "galion-devops-dev-replica-logs-backup",
+            "lifecycle_rule": [
+              {
+                "abort_incomplete_multipart_upload_days": 7,
+                "enabled": true,
+                "expiration": [
+                  {
+                    "date": "",
+                    "days": 365,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "id": "cleanup-old-replica-logs-backup",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "tags": {},
+                "transition": [
+                  {
+                    "date": "",
+                    "days": 30,
+                    "storage_class": "STANDARD_IA"
+                  }
+                ]
+              }
+            ],
+            "logging": [
+              {
+                "target_bucket": "galion-devops-dev-replica-logs-backup",
+                "target_prefix": "replica-logs-backup-access-logs/"
+              }
+            ],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "eu-west-1",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+                        "sse_algorithm": "aws:kms"
+                      }
+                    ],
+                    "bucket_key_enabled": false
+                  }
+                ]
+              }
+            ],
+            "tags": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-replica-logs-backup"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "galion-devops-dev-replica-logs-backup"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19"
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "name": "bucket_lifecycle",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "bucket": "galion-devops-dev-bucket",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-bucket",
+            "rule": [
+              {
+                "abort_incomplete_multipart_upload": [
+                  {
+                    "days_after_initiation": 7
+                  }
+                ],
+                "expiration": [
+                  {
+                    "date": null,
+                    "days": 365,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "",
+                    "tag": []
+                  }
+                ],
+                "id": "lifecycle-rule",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": [
+                  {
+                    "date": null,
+                    "days": 30,
+                    "storage_class": "STANDARD_IA"
+                  }
+                ]
+              }
+            ],
+            "timeouts": null,
+            "transition_default_minimum_object_size": "all_storage_classes_128K"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "module.s3.aws_s3_bucket.bucket"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "name": "logs_lifecycle",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "bucket": "galion-devops-dev-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-logs",
+            "rule": [
+              {
+                "abort_incomplete_multipart_upload": [
+                  {
+                    "days_after_initiation": 7
+                  }
+                ],
+                "expiration": [
+                  {
+                    "date": null,
+                    "days": 365,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "",
+                    "tag": []
+                  }
+                ],
+                "id": "cleanup-old-log-files",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": [
+                  {
+                    "date": null,
+                    "days": 30,
+                    "storage_class": "STANDARD_IA"
+                  }
+                ]
+              }
+            ],
+            "timeouts": null,
+            "transition_default_minimum_object_size": "all_storage_classes_128K"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "module.s3.aws_s3_bucket.logs"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "name": "logs_replica_lifecycle",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "bucket": "galion-devops-dev-logs-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-logs-replica",
+            "rule": [
+              {
+                "abort_incomplete_multipart_upload": [
+                  {
+                    "days_after_initiation": 7
+                  }
+                ],
+                "expiration": [
+                  {
+                    "date": null,
+                    "days": 365,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "",
+                    "tag": []
+                  }
+                ],
+                "id": "cleanup-old-replica-log-files",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": [
+                  {
+                    "date": null,
+                    "days": 30,
+                    "storage_class": "STANDARD_IA"
+                  }
+                ]
+              }
+            ],
+            "timeouts": null,
+            "transition_default_minimum_object_size": "all_storage_classes_128K"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "module.s3.aws_s3_bucket.logs_replica"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "name": "replica_lifecycle",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-replica",
+            "rule": [
+              {
+                "abort_incomplete_multipart_upload": [
+                  {
+                    "days_after_initiation": 7
+                  }
+                ],
+                "expiration": [],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "",
+                    "tag": []
+                  }
+                ],
+                "id": "cleanup-old-replica-versions",
+                "noncurrent_version_expiration": [
+                  {
+                    "newer_noncurrent_versions": null,
+                    "noncurrent_days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": []
+              }
+            ],
+            "timeouts": null,
+            "transition_default_minimum_object_size": "all_storage_classes_128K"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "module.s3.aws_s3_bucket.replica"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "name": "replica_logs_backup_lifecycle",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica-logs-backup",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-replica-logs-backup",
+            "rule": [
+              {
+                "abort_incomplete_multipart_upload": [
+                  {
+                    "days_after_initiation": 7
+                  }
+                ],
+                "expiration": [
+                  {
+                    "date": null,
+                    "days": 365,
+                    "expired_object_delete_marker": false
+                  }
+                ],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "",
+                    "tag": []
+                  }
+                ],
+                "id": "cleanup-old-replica-logs-backup",
+                "noncurrent_version_expiration": [],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": [
+                  {
+                    "date": null,
+                    "days": 30,
+                    "storage_class": "STANDARD_IA"
+                  }
+                ]
+              }
+            ],
+            "timeouts": null,
+            "transition_default_minimum_object_size": "all_storage_classes_128K"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "module.s3.aws_s3_bucket.replica_logs_backup"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_lifecycle_configuration",
+      "name": "replica_logs_lifecycle",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-replica-logs",
+            "rule": [
+              {
+                "abort_incomplete_multipart_upload": [
+                  {
+                    "days_after_initiation": 7
+                  }
+                ],
+                "expiration": [],
+                "filter": [
+                  {
+                    "and": [],
+                    "object_size_greater_than": null,
+                    "object_size_less_than": null,
+                    "prefix": "",
+                    "tag": []
+                  }
+                ],
+                "id": "cleanup-old-replica-log-versions",
+                "noncurrent_version_expiration": [
+                  {
+                    "newer_noncurrent_versions": null,
+                    "noncurrent_days": 90
+                  }
+                ],
+                "noncurrent_version_transition": [],
+                "prefix": "",
+                "status": "Enabled",
+                "transition": []
+              }
+            ],
+            "timeouts": null,
+            "transition_default_minimum_object_size": "all_storage_classes_128K"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "dependencies": [
+            "module.s3.aws_s3_bucket.replica_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_logging",
+      "name": "bucket_logging",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-bucket",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-bucket",
+            "target_bucket": "galion-devops-dev-logs",
+            "target_grant": [],
+            "target_object_key_format": [],
+            "target_prefix": "access-logs/"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.bucket",
+            "module.s3.aws_s3_bucket.logs"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_logging",
+      "name": "logs_replica_logging",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-logs-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-logs-replica",
+            "target_bucket": "galion-devops-dev-replica-logs-backup",
+            "target_grant": [],
+            "target_object_key_format": [],
+            "target_prefix": "logs-replica-access-logs/"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.logs_replica",
+            "module.s3.aws_s3_bucket.replica_logs_backup"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_logging",
+      "name": "replica_logging",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-replica",
+            "target_bucket": "galion-devops-dev-replica-logs",
+            "target_grant": [],
+            "target_object_key_format": [],
+            "target_prefix": "replica-access-logs/"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.replica",
+            "module.s3.aws_s3_bucket.replica_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_logging",
+      "name": "replica_logs_backup_logging",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica-logs-backup",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-replica-logs-backup",
+            "target_bucket": "galion-devops-dev-replica-logs-backup",
+            "target_grant": [],
+            "target_object_key_format": [],
+            "target_prefix": "replica-logs-backup-access-logs/"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.replica_logs_backup"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "bucket_public_access_block",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "bucket": "galion-devops-dev-bucket",
+            "id": "galion-devops-dev-bucket",
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.bucket"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "logs_public_access_block",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "bucket": "galion-devops-dev-logs",
+            "id": "galion-devops-dev-logs",
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.logs"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "logs_replica_public_access_block",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "bucket": "galion-devops-dev-logs-replica",
+            "id": "galion-devops-dev-logs-replica",
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.logs_replica"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "replica_logs_backup_public_access_block",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "bucket": "galion-devops-dev-replica-logs-backup",
+            "id": "galion-devops-dev-replica-logs-backup",
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.replica_logs_backup"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "replica_logs_public_access_block",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "bucket": "galion-devops-dev-replica-logs",
+            "id": "galion-devops-dev-replica-logs",
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.replica_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_public_access_block",
+      "name": "replica_public_access_block",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "block_public_acls": true,
+            "block_public_policy": true,
+            "bucket": "galion-devops-dev-replica",
+            "id": "galion-devops-dev-replica",
+            "ignore_public_acls": true,
+            "restrict_public_buckets": true
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.replica"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_replication_configuration",
+      "name": "logs_replication",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-logs",
+            "id": "galion-devops-dev-logs",
+            "role": "arn:aws:iam::867958227579:role/galion-devops-dev-s3-replication-role",
+            "rule": [
+              {
+                "delete_marker_replication": [
+                  {
+                    "status": "Enabled"
+                  }
+                ],
+                "destination": [
+                  {
+                    "access_control_translation": [],
+                    "account": "",
+                    "bucket": "arn:aws:s3:::galion-devops-dev-logs-replica",
+                    "encryption_configuration": [
+                      {
+                        "replica_kms_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3"
+                      }
+                    ],
+                    "metrics": [],
+                    "replication_time": [],
+                    "storage_class": "STANDARD"
+                  }
+                ],
+                "existing_object_replication": [],
+                "filter": [
+                  {
+                    "and": [],
+                    "prefix": null,
+                    "tag": []
+                  }
+                ],
+                "id": "logs-replication-rule",
+                "prefix": "",
+                "priority": 0,
+                "source_selection_criteria": [
+                  {
+                    "replica_modifications": [],
+                    "sse_kms_encrypted_objects": [
+                      {
+                        "status": "Enabled"
+                      }
+                    ]
+                  }
+                ],
+                "status": "Enabled"
+              }
+            ],
+            "token": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "token"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_iam_role.s3_replication_role",
+            "module.s3.aws_kms_key.s3_replica",
+            "module.s3.aws_s3_bucket.logs",
+            "module.s3.aws_s3_bucket.logs_replica",
+            "module.s3.aws_s3_bucket_versioning.logs_replica_versioning",
+            "module.s3.aws_s3_bucket_versioning.logs_versioning",
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_replication_configuration",
+      "name": "replica_logs_replication",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica-logs",
+            "id": "galion-devops-dev-replica-logs",
+            "role": "arn:aws:iam::867958227579:role/galion-devops-dev-s3-replication-role",
+            "rule": [
+              {
+                "delete_marker_replication": [
+                  {
+                    "status": "Enabled"
+                  }
+                ],
+                "destination": [
+                  {
+                    "access_control_translation": [],
+                    "account": "",
+                    "bucket": "arn:aws:s3:::galion-devops-dev-replica-logs-backup",
+                    "encryption_configuration": [
+                      {
+                        "replica_kms_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3"
+                      }
+                    ],
+                    "metrics": [],
+                    "replication_time": [],
+                    "storage_class": "STANDARD"
+                  }
+                ],
+                "existing_object_replication": [],
+                "filter": [
+                  {
+                    "and": [],
+                    "prefix": null,
+                    "tag": []
+                  }
+                ],
+                "id": "replica-logs-replication-rule",
+                "prefix": "",
+                "priority": 0,
+                "source_selection_criteria": [
+                  {
+                    "replica_modifications": [],
+                    "sse_kms_encrypted_objects": [
+                      {
+                        "status": "Enabled"
+                      }
+                    ]
+                  }
+                ],
+                "status": "Enabled"
+              }
+            ],
+            "token": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "token"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_iam_role.s3_replication_role",
+            "module.s3.aws_kms_key.s3_replica",
+            "module.s3.aws_s3_bucket.replica_logs",
+            "module.s3.aws_s3_bucket.replica_logs_backup",
+            "module.s3.aws_s3_bucket_versioning.replica_logs_backup_versioning",
+            "module.s3.aws_s3_bucket_versioning.replica_logs_versioning",
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_replication_configuration",
+      "name": "replication",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-bucket",
+            "id": "galion-devops-dev-bucket",
+            "role": "arn:aws:iam::867958227579:role/galion-devops-dev-s3-replication-role",
+            "rule": [
+              {
+                "delete_marker_replication": [
+                  {
+                    "status": "Enabled"
+                  }
+                ],
+                "destination": [
+                  {
+                    "access_control_translation": [],
+                    "account": "",
+                    "bucket": "arn:aws:s3:::galion-devops-dev-replica",
+                    "encryption_configuration": [
+                      {
+                        "replica_kms_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3"
+                      }
+                    ],
+                    "metrics": [],
+                    "replication_time": [],
+                    "storage_class": "STANDARD"
+                  }
+                ],
+                "existing_object_replication": [],
+                "filter": [
+                  {
+                    "and": [],
+                    "prefix": null,
+                    "tag": []
+                  }
+                ],
+                "id": "replication-rule",
+                "prefix": "",
+                "priority": 0,
+                "source_selection_criteria": [
+                  {
+                    "replica_modifications": [],
+                    "sse_kms_encrypted_objects": [
+                      {
+                        "status": "Enabled"
+                      }
+                    ]
+                  }
+                ],
+                "status": "Enabled"
+              }
+            ],
+            "token": null
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "token"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_iam_role.s3_replication_role",
+            "module.s3.aws_kms_key.s3_replica",
+            "module.s3.aws_s3_bucket.bucket",
+            "module.s3.aws_s3_bucket.replica",
+            "module.s3.aws_s3_bucket_versioning.bucket_versioning",
+            "module.s3.aws_s3_bucket_versioning.replica_versioning",
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "bucket_encryption",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-bucket",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-bucket",
+            "rule": [
+              {
+                "apply_server_side_encryption_by_default": [
+                  {
+                    "kms_master_key_id": "arn:aws:kms:us-east-1:867958227579:key/60c845a3-3288-47de-9cfa-0d9467a75eb5",
+                    "sse_algorithm": "aws:kms"
+                  }
+                ],
+                "bucket_key_enabled": false
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_kms_key.s3",
+            "module.s3.aws_s3_bucket.bucket",
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "logs_encryption",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-logs",
+            "rule": [
+              {
+                "apply_server_side_encryption_by_default": [
+                  {
+                    "kms_master_key_id": "arn:aws:kms:us-east-1:867958227579:key/60c845a3-3288-47de-9cfa-0d9467a75eb5",
+                    "sse_algorithm": "aws:kms"
+                  }
+                ],
+                "bucket_key_enabled": false
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_kms_key.s3",
+            "module.s3.aws_s3_bucket.logs",
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "logs_replica_encryption",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-logs-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-logs-replica",
+            "rule": [
+              {
+                "apply_server_side_encryption_by_default": [
+                  {
+                    "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+                    "sse_algorithm": "aws:kms"
+                  }
+                ],
+                "bucket_key_enabled": false
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_kms_key.s3_replica",
+            "module.s3.aws_s3_bucket.logs_replica",
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "replica_encryption",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-replica",
+            "rule": [
+              {
+                "apply_server_side_encryption_by_default": [
+                  {
+                    "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+                    "sse_algorithm": "aws:kms"
+                  }
+                ],
+                "bucket_key_enabled": false
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_kms_key.s3_replica",
+            "module.s3.aws_s3_bucket.replica",
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "replica_logs_backup_encryption",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica-logs-backup",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-replica-logs-backup",
+            "rule": [
+              {
+                "apply_server_side_encryption_by_default": [
+                  {
+                    "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+                    "sse_algorithm": "aws:kms"
+                  }
+                ],
+                "bucket_key_enabled": false
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_kms_key.s3_replica",
+            "module.s3.aws_s3_bucket.replica_logs_backup",
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_server_side_encryption_configuration",
+      "name": "replica_logs_encryption",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-replica-logs",
+            "rule": [
+              {
+                "apply_server_side_encryption_by_default": [
+                  {
+                    "kms_master_key_id": "arn:aws:kms:eu-west-1:867958227579:key/8e213718-7074-4c4d-a6a2-2c9380e832c3",
+                    "sse_algorithm": "aws:kms"
+                  }
+                ],
+                "bucket_key_enabled": false
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_kms_key.s3_replica",
+            "module.s3.aws_s3_bucket.replica_logs",
+            "module.s3.data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_versioning",
+      "name": "bucket_versioning",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-bucket",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-bucket",
+            "mfa": null,
+            "versioning_configuration": [
+              {
+                "mfa_delete": "",
+                "status": "Enabled"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.bucket"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_versioning",
+      "name": "logs_replica_versioning",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-logs-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-logs-replica",
+            "mfa": null,
+            "versioning_configuration": [
+              {
+                "mfa_delete": "",
+                "status": "Enabled"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.logs_replica"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_versioning",
+      "name": "logs_versioning",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-logs",
+            "mfa": null,
+            "versioning_configuration": [
+              {
+                "mfa_delete": "",
+                "status": "Enabled"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.logs"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_versioning",
+      "name": "replica_logs_backup_versioning",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica-logs-backup",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-replica-logs-backup",
+            "mfa": null,
+            "versioning_configuration": [
+              {
+                "mfa_delete": "",
+                "status": "Enabled"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.replica_logs_backup"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_versioning",
+      "name": "replica_logs_versioning",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica-logs",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-replica-logs",
+            "mfa": null,
+            "versioning_configuration": [
+              {
+                "mfa_delete": "",
+                "status": "Enabled"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.replica_logs"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.s3",
+      "mode": "managed",
+      "type": "aws_s3_bucket_versioning",
+      "name": "replica_versioning",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replication",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "bucket": "galion-devops-dev-replica",
+            "expected_bucket_owner": "",
+            "id": "galion-devops-dev-replica",
+            "mfa": null,
+            "versioning_configuration": [
+              {
+                "mfa_delete": "",
+                "status": "Enabled"
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.s3.aws_s3_bucket.replica"
+          ]
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
