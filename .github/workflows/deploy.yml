@@ -135,11 +135,11 @@ jobs:
 
       - name: Test accessibilité serveur web
         run: |
-          curl -f http://100.53.85.65
+          curl -f http://44.200.16.184
 
       - name: Vérification contenu page web
         run: |
-          curl -f http://100.53.85.65 | grep "Galion DevOps"
+          curl -f http://44.200.16.184 | grep "Galion DevOps"
 
 
 
@@ -189,4 +189,6 @@ jobs:
 
           echo "## Final Status" >> $GITHUB_STEP_SUMMARY
 
-          echo "Deployment pipeline completed." >> $GITHUB_STEP_SUMMARY
+          echo "Deployment pipeline completed." >> $GITHUB_STEP_SUMMARYcurl -f http://44.200.16.184
+
+            
