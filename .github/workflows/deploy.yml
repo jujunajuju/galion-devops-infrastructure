@@ -69,6 +69,9 @@ jobs:
     needs:
       - validation
       - security
+    
+    outputs:
+      ec2_ip: ${{ steps.terraform_output.outputs.ec2_ip }}
 
     steps:
 
@@ -90,6 +93,11 @@ jobs:
 
       - name: Déploiement Terraform
         run: terraform apply -auto-approve
+      
+      - name: Récupération IP EC2
+        id: terraform_output
+        run: |
+          echo "ec2_ip=$(terraform output -raw ec2_public_ip)" >> $GITHUB_OUTPUT
 
 
 
@@ -117,6 +125,17 @@ jobs:
           chmod 400 ~/.ssh/galion-devops-key.pem
           ssh-keygen -y -f ~/.ssh/galion-devops-key.pem > /dev/null
 
+      - name: Mise à jour inventaire Ansible
+        working-directory: ansible
+        run: |
+          echo "[webserver]" > inventory.ini
+          echo "${{ needs.deploy.outputs.ec2_ip }}" >> inventory.ini
+          echo "" >> inventory.ini
+          echo "[webserver:vars]" >> inventory.ini
+          echo "ansible_user=ec2-user" >> inventory.ini
+          echo "ansible_ssh_private_key_file=~/.ssh/galion-devops-key.pem" >> inventory.ini
+
+
       - name: Déploiement configuration Ansible
         working-directory: ansible
         run: |
@@ -135,11 +154,11 @@ jobs:
 
       - name: Test accessibilité serveur web
         run: |
-          curl -f http://44.200.16.184
+          curl -f http://${{ needs.deploy.outputs.ec2_ip }}
 
       - name: Vérification contenu page web
         run: |
-          curl -f http://44.200.16.184 | grep "Galion DevOps"
+          curl -f http://${{ needs.deploy.outputs.ec2_ip }} | grep "Galion DevOps"
 
 
 
