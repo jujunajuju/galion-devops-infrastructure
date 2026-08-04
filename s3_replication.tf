@@ -675,7 +675,7 @@ resource "aws_s3_bucket_replication_configuration" "terraform_state_logs_replica
   depends_on = [
     aws_s3_bucket_versioning.terraform_state_logs_versioning,
     aws_s3_bucket_versioning.terraform_state_replica_logs_versioning
-]
+  ]
 
 
 
