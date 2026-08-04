@@ -189,6 +189,6 @@ jobs:
 
           echo "## Final Status" >> $GITHUB_STEP_SUMMARY
 
-          echo "Deployment pipeline completed." >> $GITHUB_STEP_SUMMARYcurl
+          echo "Deployment pipeline completed." >> $GITHUB_STEP_SUMMARY
 
             
