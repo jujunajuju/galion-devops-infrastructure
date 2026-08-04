@@ -99,7 +99,9 @@ jobs:
         run: |
           echo "ec2_ip=$(terraform output -raw ec2_public_ip)" >> $GITHUB_OUTPUT
 
-
+      - name: Vérification IP récupérée
+        run: |
+          echo "IP EC2 = ${{ steps.terraform_output.outputs.ec2_ip }}"
 
   ansible:
     name: Configuration Ansible
