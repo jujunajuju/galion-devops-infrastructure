@@ -189,6 +189,6 @@ jobs:
 
           echo "## Final Status" >> $GITHUB_STEP_SUMMARY
 
-          echo "Deployment pipeline completed." >> $GITHUB_STEP_SUMMARYcurl -f http://44.200.16.184
+          echo "Deployment pipeline completed." >> $GITHUB_STEP_SUMMARYcurl
 
             
