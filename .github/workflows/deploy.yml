@@ -151,6 +151,7 @@ jobs:
 
     needs:
       - ansible
+      - deploy
 
     steps:
 
